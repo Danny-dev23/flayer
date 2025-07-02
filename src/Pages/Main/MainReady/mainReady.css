@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
-
 .main-ready {
   background-image: url(../../../assents//images//BgReady.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  padding: 100px 0px 80px 0px;
+  padding: 100px 20px 80px 20px;
   text-align: center;
   border-radius: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
 .main-ready-image {
   margin-bottom: 70px;
 }
@@ -34,21 +36,64 @@
   border: none;
 }
 
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .main-ready {
+    padding: 80px 15px 60px 15px;
+  }
+  
+  .main-ready-title {
+    font-size: 36px;
+  }
+  
+  .main-ready-image {
+    margin-bottom: 50px;
+  }
+}
 
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
+  .main-ready {
+    padding: 60px 15px 50px 15px;
+  }
+  
+  .main-ready-title {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+  
+  .main-ready-description {
+    font-size: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .main-ready-image {
+    width: 80px;
+    height: auto;
+    margin-bottom: 30px;
+  }
+}
 
-@media screen and (max-width: 430px) {
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
   .main-ready-image {
     width: 56px;
     height: 43px;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
   }
+  
   .main-ready {
-    padding: 30px 0px 30px 0px;
-    border-radius: 20px;
+    padding: 40px 10px 40px 10px;
   }
+  
   .main-ready-title {
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 12px;
+  }
+  
+  .main-ready-description {
+    font-size: 14px;
+    margin-bottom: 24px;
   }
 }

@@ -2,6 +2,8 @@
   background: #f4f5f7;
   min-height: 100vh;
   padding: 30px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .my-bots__title {
@@ -55,7 +57,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60%;
+  width: 100%;
+  max-width: 740px;
 }
 
 .my-bots__item-title {
@@ -74,7 +77,8 @@
   padding: 24px 32px;
   margin: 24px 0;
   box-shadow: 0 2px 8px rgba(60, 60, 60, 0.06);
-  width: 740px;
+  width: 100%;
+  max-width: 740px;
 }
 
 .my-bots__add-form-title {
@@ -106,8 +110,6 @@
   margin-bottom: 16px;
 }
 
-
-
 .my-bots__item__head {
   display: flex;
   align-items: center;
@@ -119,7 +121,6 @@
 
 .my-bots__item-title-user {
   display: flex;
-
 }
 
 .my-bots__item-title-user-text {
@@ -250,7 +251,6 @@
   padding: 4px;
   border-radius: 6px;
   transition: color 0.2s, background 0.2s;
-
 }
 
 .my-bots__edit-form-title {
@@ -265,8 +265,6 @@
   margin-bottom: 8px;
 }
 
-
-
 .my-bots__edit-btn:active,
 .my-bots__delete-btn:active {
   color: #456EFD;
@@ -274,8 +272,6 @@
 
 .my-bots__item {
   position: relative;
-  /* Для позиционирования модалки внутри карточки */
-
 }
 
 .my-bots__buy-mobile__btn {
@@ -298,7 +294,6 @@
   border: 2px solid #456EFD;
 }
 
-/* Встроенное модальное окно удаления */
 .my-bots__modal-inline {
   background: #fff;
   border-radius: 14px;
@@ -369,7 +364,27 @@
   width: 130px;
 }
 
-@media (max-width: 430px) {
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .my-bots {
+    padding: 25px 30px;
+  }
+  
+  .my-bots__add-form-block {
+    padding: 20px 24px;
+  }
+  
+  .my-bots__item {
+    padding: 16px 20px;
+  }
+}
+
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
+  .my-bots {
+    padding: 20px 20px;
+  }
+  
   .my-bots__pc {
     display: none;
   }
@@ -430,9 +445,6 @@
 
   .my-bots__item__head-image {
     margin-left: 0px;
-  }
-
-  .my-bots__item__head-image {
     width: 60px;
     height: 60px;
     overflow: visible;
@@ -446,6 +458,32 @@
     font-size: 16px;
     font-weight: 400;
     margin-bottom: 12px;
+  }
+}
+
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
+  .my-bots {
+    padding: 15px 15px;
+  }
+  
+  .my-bots__add-form-block {
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  
+  .my-bots__item {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+  
+  .my-bots__upload-btn {
+    padding: 6px 40px;
+    font-size: 14px;
+  }
+  
+  .my-bots__item-title-text-name {
+    font-size: 13px;
   }
 }
 
@@ -819,7 +857,7 @@
 }
 
 /* Responsive styles */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .custom-calendar {
     max-width: 330px;
     padding: 0px !important;
@@ -861,10 +899,6 @@
     width: 28px;
   }
 
-  .my-bots {
-    padding: 20px 20px;
-  }
-
   .custom-calendar__trigger {
     min-width: 265px !important;
     max-width: 265px !important;
@@ -878,5 +912,27 @@
 
   .custom-calendar__month-title {
     font-size: 16px;
+  }
+}
+
+/* Mobile styles for calendar */
+@media (max-width: 500px) {
+  .custom-calendar {
+    max-width: 300px;
+  }
+  
+  .custom-calendar__dropdown {
+    width: 300px;
+  }
+  
+  .custom-calendar__day-btn {
+    height: 32px;
+    width: 32px;
+    font-size: 12px;
+  }
+  
+  .custom-calendar__trigger {
+    min-width: 240px !important;
+    max-width: 240px !important;
   }
 }

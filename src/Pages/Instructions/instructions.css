@@ -1,8 +1,9 @@
-
 .instructions {
   background: #EFF0F2;
   padding: 32px 40px 113px 24px;
   min-height: calc(100vh - 270px);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .instructions-title {
@@ -13,8 +14,8 @@
 
 .instructions-box {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px ;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
 }
 
 .instructions-box__card {
@@ -36,15 +37,64 @@
   margin-bottom: 4px;
 }
 
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .instructions {
+    padding: 28px 30px 80px 20px;
+  }
+  
+  .instructions-box {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
 
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
+  .instructions {
+    padding: 24px 20px 60px 20px;
+  }
+  
+  .instructions-box {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .instructions-box__card {
+    padding: 20px;
+  }
+  
+  .instructions-box__card-title {
+    font-size: 18px;
+  }
+  
+  .instructions-box__card-text {
+    font-size: 15px;
+  }
+}
 
-@media screen and (max-width: 430px) {
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
   .instructions-box {
     display: flex;
     flex-wrap: wrap;
   }
+  
   .instructions {
     height: 100%;
-    padding: 32px 24px 40px 24px;
+    padding: 20px 15px 40px 15px;
+  }
+  
+  .instructions-box__card {
+    padding: 16px 20px;
+  }
+  
+  .instructions-box__card-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .instructions-box__card-text {
+    font-size: 14px;
   }
 }

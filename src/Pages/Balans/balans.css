@@ -2,6 +2,8 @@
   padding: 32px 40px 32px 24px;
   background: #EFF0F2;
   min-height: calc(100vh - 72px);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .balans-title {
@@ -47,7 +49,6 @@
   justify-content: space-between;
   box-sizing: border-box;
   margin-bottom: 16px;
-
 }
 
 .balans-button {
@@ -73,12 +74,13 @@
 .balans-flex {
   display: flex;
   margin-top: 44px;
+  gap: 20px;
 }
 
 .balans-container {
   margin-bottom: 30px;
-  margin-right: 180px;
-  width: 490px;
+  flex: 1;
+  max-width: 570px;
 }
 
 .balans-operations {
@@ -86,6 +88,7 @@
   background: #fff;
   border-radius: 16px;
   width: 384px;
+  min-width: 300px;
 }
 
 .balans-operation-filters {
@@ -192,9 +195,9 @@
   color: #000;
   padding: 16px;
   margin: 8px 0px;
-  max-width: 486px;
+  max-width: 570px;
   border-radius: 20px;
-  width: 570px;
+  width: 100%;
 }
 
 .balans-history-date {
@@ -252,31 +255,51 @@
   border: 1px solid #606060;
 }
 
-
 .balans-info__date-button img {
   margin-left: 8px;
 }
 
-@media (max-width: 430px) {
-
-  /* .balans-method-mobile {
-    display: block;
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .balans {
+    padding: 28px 30px;
+  }
+  
+  .balans-flex {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .balans-operations {
     width: 100%;
-  } */
+    max-width: 500px;
+  }
+  
+  .balans-container {
+    max-width: 100%;
+  }
+}
+
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
   .balans {
     padding: 20px;
   }
+  
   .balans-info__date {
     margin-top: 16px;
   }
+  
   .balans-flex {
     width: 100%;
     display: flex;
     flex-direction: column-reverse;
   }
+  
   .balans-container {
     width: 100%;
   }
+  
   .balans-operations {
     width: 100%;
   }
@@ -330,26 +353,22 @@
   .balans-history-status__success {
     order: 2;
     margin-left: auto;
-    /* уводит элемент вправо */
   }
 
   .balans-history-status__checking {
     order: 2;
     margin-left: auto;
-    /* уводит элемент вправо */
   }
 
   .balans-history-status__denied {
     order: 2;
     margin-left: auto;
-    /* уводит элемент вправо */
   }
 
   /* Второй блок (Сумма) */
   .balans-history-amount {
     order: 3;
     width: 100%;
-    /* на новой строке */
     margin-top: 8px;
   }
 
@@ -376,13 +395,46 @@
     margin-right: 0;
   }
 
-
   .balans-operation-slider {
     overflow-x: auto;
     scrollbar-width: none;
     gap: 8px;
     display: flex;
     width: 100%;
+  }
+}
+
+/* Mobile styles (500px and below) */
+@media (max-width: 500px) {
+  .balans {
+    padding: 15px;
+  }
+  
+  .balans-operations {
+    padding: 12px;
+  }
+  
+  .balans-button {
+    padding: 3px 8px;
+    font-size: 13px;
+  }
+  
+  .balans-history-item {
+    padding: 12px;
+    margin: 6px 0;
+  }
+  
+  .balans-history-status__success,
+  .balans-history-status__checking,
+  .balans-history-status__denied {
+    width: 80px;
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+  
+  .balans-history-amount {
+    width: 120px;
+    font-size: 14px;
   }
 }
 

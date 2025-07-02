@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
-
 .faq-title {
   font-family: "Manrope", sans-serif;
   font-size: 48px;
@@ -13,22 +12,22 @@
   color: #407bff;
 }
 
-
 .faq-box {
-  width: 588px;
+  width: 100%;
+  max-width: 588px;
   margin: 0 auto;
 }
 
 .faq-container {
   max-width: 800px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .faq-item {
   margin-bottom: 20px;
   border: 1px solid #407bff;
   border-radius: 20px;
-  padding-bottom: 10px;
   padding: 25px;
 }
 
@@ -59,26 +58,60 @@
 }
 
 .faq-answer.open {
-  max-height: 200px; /* Укажите максимальную высоту, достаточную для текста */
+  max-height: 200px;
   padding: 10px 0;
 }
 
-
-@media screen and (max-width: 430px) {
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .faq-container {
+    padding: 0 15px;
+  }
+  
   .faq-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    font-weight: 900;
-  }
-  .faq-box {
-    width: 100%;
-  }
-  .faq-question > span {
-    font-size: 16px;
-  }
-  .faq-answer {
-    font-size: 12px;
+    font-size: 36px;
+    margin-bottom: 40px;
   }
 }
 
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
+  .faq-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+  
+  .faq-question > span {
+    font-size: 16px;
+  }
+  
+  .faq-answer {
+    font-size: 14px;
+  }
+  
+  .faq-item {
+    padding: 20px;
+  }
+}
+
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
+  .faq-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  
+  .faq-item {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .faq-question > span {
+    font-size: 15px;
+  }
+  
+  .faq-answer {
+    font-size: 13px;
+  }
+}

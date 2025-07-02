@@ -1,6 +1,8 @@
 .main {
-  background:#EFF0F2 ;
+  background: #EFF0F2;
   padding-bottom: 60px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .bg-main {
@@ -16,21 +18,45 @@
   border-radius: 20px;
 }
 
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .bg-main {
+    margin: 0px 40px 24px 20px;
+    padding: 80px 20px 60px 20px;
+  }
+  
+  .bg-white {
+    margin: 0px 40px 24px 20px;
+  }
+}
 
-
-@media screen and (max-width: 430px) {
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
   .bg-main {
     margin: 20px 20px 16px 20px;
-    padding: 60px 10px 50px 10px;
+    padding: 60px 15px 50px 15px;
     border-radius: 20px;
   }
+  
   .bg-white {
-    margin: 0px 24px 28px 24px;
+    margin: 0px 20px 20px 20px;
     border-radius: 20px;
   }
+  
   .main {
     padding-top: 20px;
     padding-bottom: 20px;
   }
 }
-    
+
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
+  .bg-main {
+    margin: 15px 15px 12px 15px;
+    padding: 40px 10px 30px 10px;
+  }
+  
+  .bg-white {
+    margin: 0px 15px 15px 15px;
+  }
+}

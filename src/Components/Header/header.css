@@ -3,7 +3,7 @@ body {
 }
 
 .header {
-  padding: 12px 40px;
+  padding: 12px 20px;
   border-bottom: 1px solid #ddd;
   position: fixed;
   margin-bottom: 90px;
@@ -17,10 +17,12 @@ body {
   justify-content: space-between;
   align-items: center;
   position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .nav-logo-pc {
-
+  display: block;
 }
 
 .nav-logo {
@@ -136,60 +138,100 @@ body {
   font-size: 13px;
 }
 
-@media screen and (max-width: 430px) {
-  .telegram-login {
-    display: none;
+/* Tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 16px 20px;
   }
-  .telegram-login-button__text {
-    display: none;
+  
+  .nav {
+    max-width: 100%;
+  }
+  
+  .account-info-center {
+    position: static;
+    transform: none;
+    order: 2;
+    margin: 0 auto;
+  }
+  
+  .nav-right {
+    order: 3;
+  }
+  
+  .nav-logo-pc {
+    order: 1;
+  }
+  
+  .header-balans {
+    margin-right: 20px;
+    padding: 8px 12px;
+    font-size: 14px;
   }
 }
 
-@media screen and (max-width: 600px) {
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
+  .telegram-login {
+    display: none;
+  }
+  
+  .telegram-login-button__text {
+    display: none;
+  }
+  
   .account-info-center {
     display: none !important;
   }
+  
   .header-balans {
     margin-right: 16px;
     padding: 8px 10px;
     font-size: 14px;
   }
+  
   .nav-logo-pc {
     display: none;
   }
+  
   .nav-logo {
     display: block;
   }
+  
   .nav {
     padding: 0;
   }
+  
   .header {
     padding: 20px 15px 8px 15px;
     background: #f4f5f7;
   }
+  
   .nav-logo img {
     max-width: 100%;
     height: auto;
   }
-  .account-info-center {
-    display: none;
-  }
+  
   .nav-cart {
     background: #fff;
     padding: 10px;
     border-radius: 12px;
   }
+  
   .cart-count {
     top: -5px;
     right: -5px;
   }
+  
   .nav-cart img {
-    width: 18x;
+    width: 18px;
     height: 18px;
   }
+  
   .telegram-login-button {
     padding: 10px 10px;
   }
+  
   .account-info__images {
     margin-right: 0;
   }

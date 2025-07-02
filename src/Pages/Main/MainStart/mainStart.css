@@ -3,9 +3,10 @@
   background-repeat: no-repeat;
   background-position: top;
   background-size: 95% 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
-
-
 
 .main-start__title {
   text-align: center;
@@ -25,21 +26,31 @@
 .main-start__steps-box {
   display: flex;
   align-items: flex-end;
+  width: 100%;
+  max-width: 1140px;
 }
+
 .main-start__steps-box__image {
   margin-bottom: 16px;
   margin-left: 20px;
+  flex-shrink: 0;
 }
 
+.main-start__steps-box__image img {
+  max-width: 100%;
+  height: auto;
+}
 
+.main-start__steps-box__item {
+  flex: 1;
+}
 
-.main-start__step  {
+.main-start__step {
   padding: 25px;
   border: 1px solid #407bff;
   margin-bottom: 16px;
   border-radius: 20px;
   width: 100%;
-  max-width: 1140px;
 }
 
 .main-start__step-title {
@@ -56,30 +67,78 @@
   display: none;
 }
 
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .main-start {
+    padding: 0 15px;
+  }
+  
+  .main-start__title {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+  
+  .main-start__steps-box {
+    flex-direction: column;
+  }
+  
+  .main-start__steps-box__image {
+    order: 2;
+    margin: 20px 0 0 0;
+    align-self: center;
+  }
+  
+  .main-start__steps-box__item {
+    order: 1;
+  }
+}
 
-@media screen and (max-width: 430px) {
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
   .main-start__steps {
     display: none;
   }
-  .main-start__steps-box__image > img {
-    width: 100%;
-  }
+  
   .main-start__steps-mobile {
     display: block;
   }
+  
   .main-start__title {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 700;
     padding-top: 0;
     margin-bottom: 32px;
   }
+  
   .main-start {
     background-image: none;
   }
+  
   .main-start__step-title {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 700;
   }
+  
+  .main-start__step-description {
+    font-size: 15px;
+  }
+}
+
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
+  .main-start__title {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+  
+  .main-start__step {
+    padding: 20px 15px;
+  }
+  
+  .main-start__step-title {
+    font-size: 18px;
+  }
+  
   .main-start__step-description {
     font-size: 14px;
   }

@@ -1,11 +1,12 @@
 .home-container {
   display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .step-fix-mobile {
   display: none;
 }
-
 
 .step-content {
   width: 100%;
@@ -43,10 +44,6 @@
   border-radius: 10px;
 }
 
-/* .cart-box {
-  display: flex;
-} */
-
 .cart-item__price {
   margin-top: 16px;
   margin-left: 24px;
@@ -67,10 +64,10 @@
 }
 
 .step-button__smart {
-  border: 2px solid transparent; /* прозрачная рамка */
+  border: 2px solid transparent;
   border-radius: 12px;
   background: linear-gradient(white, white) padding-box,
-    linear-gradient(90deg, #456efd, #fc02c9) border-box; /* градиентная рамка */
+    linear-gradient(90deg, #456efd, #fc02c9) border-box;
   border-radius: 10px;
   overflow: hidden;
   border-radius: 10px;
@@ -139,9 +136,28 @@
   width: 84px;
 }
 
-@media screen and (max-width: 430px) {
+/* Tablet styles (768px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .home-container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+  
+  .step-fix {
+    min-width: 200px;
+    padding: 125px 15px 0px 15px;
+  }
+  
+  .step-buttons {
+    width: 200px;
+  }
+}
+
+/* Small tablet styles (500px - 768px) */
+@media screen and (max-width: 768px) {
   .home-container {
     flex-direction: column-reverse;
+    padding: 0 15px;
   }
 
   .step-buttons {
@@ -160,6 +176,7 @@
   .step-fix {
     display: none;
   }
+  
   .step-fix-mobile {
     display: block !important;
     min-width: 220px;
@@ -220,6 +237,7 @@
     margin: 0 auto 2px auto;
     display: block;
   }
+  
   .mobile-smart-btn {
     width: 36px;
     height: 26px;
@@ -228,12 +246,25 @@
     display: flex;
     align-items: center;
   }
+  
   .step-button__smart-mobile.active > .mobile-smart-btn {
     background: linear-gradient(90deg, #456efd, #fc02c9);
   }
+  
   .mobile-smart-btn img {
     width: 100%;
     height: 22px;
     object-fit: contain;
+  }
+}
+
+/* Mobile styles (500px and below) */
+@media screen and (max-width: 500px) {
+  .home-container {
+    padding: 0 10px;
+  }
+  
+  .step-content {
+    padding-bottom: 80px;
   }
 }
