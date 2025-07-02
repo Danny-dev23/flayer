@@ -1,6 +1,7 @@
 .balans {
   padding: 32px 40px 32px 24px;
   background: #EFF0F2;
+  min-height: calc(100vh - 72px);
 }
 
 .balans-title {
@@ -21,18 +22,37 @@
 .balans-header {
   display: flex;
   align-items: center;
-  margin: 30px 0px;
+  margin: 0px 0px;
+}
+
+.custom-calendar__balans {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.balans-info__date {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.balans-operation-slider {
+  margin-bottom: 32px;
 }
 
 .balans-buttons {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   box-sizing: border-box;
+  margin-bottom: 16px;
 
 }
 
 .balans-button {
-  padding: 12px;
+  width: 33.3%;
+  padding: 4px 12px;
   border-radius: 12px;
   margin: 0px 8px 0px 0px;
   background: transparent;
@@ -52,11 +72,13 @@
 
 .balans-flex {
   display: flex;
-  justify-content: space-between;
+  margin-top: 44px;
 }
 
 .balans-container {
   margin-bottom: 30px;
+  margin-right: 180px;
+  width: 490px;
 }
 
 .balans-operations {
@@ -162,8 +184,6 @@
   border-radius: 8px;
 }
 
-
-
 .balans-history-item {
   display: flex;
   justify-content: space-between;
@@ -174,6 +194,7 @@
   margin: 8px 0px;
   max-width: 486px;
   border-radius: 20px;
+  width: 570px;
 }
 
 .balans-history-date {
@@ -183,8 +204,6 @@
 .balans-history-date__span {
   color: #456EFD;
 }
-
-
 
 .balans-history-status__success {
   background: #456EFD;
@@ -220,13 +239,50 @@
   display: none;
 }
 
+.balans-history-amount {
+  width: 154px;
+  white-space: nowrap;
+}
+
+.balans-info__date-button {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: #606060;
+  border: 1px solid #606060;
+}
+
+
+.balans-info__date-button img {
+  margin-left: 8px;
+}
+
 @media (max-width: 430px) {
-  .balans-method-mobile {
+
+  /* .balans-method-mobile {
     display: block;
+    width: 100%;
+  } */
+  .balans {
+    padding: 20px;
+  }
+  .balans-info__date {
+    margin-top: 16px;
+  }
+  .balans-flex {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .balans-container {
+    width: 100%;
+  }
+  .balans-operations {
+    width: 100%;
   }
 
   .balans-method {
-    display: none;
+    display: block;
   }
 
   .balans-header {
@@ -240,6 +296,7 @@
 
   .balans-button {
     width: 33.3%;
+    padding: 4px 12px;
   }
 
   .balans-buttons {
@@ -275,16 +332,19 @@
     margin-left: auto;
     /* уводит элемент вправо */
   }
+
   .balans-history-status__checking {
     order: 2;
     margin-left: auto;
     /* уводит элемент вправо */
   }
+
   .balans-history-status__denied {
     order: 2;
     margin-left: auto;
     /* уводит элемент вправо */
   }
+
   /* Второй блок (Сумма) */
   .balans-history-amount {
     order: 3;
@@ -295,6 +355,7 @@
 
   .balans-history-item {
     flex-wrap: wrap;
+    width: 100%;
   }
 
   .balans-history-date__span {
@@ -302,21 +363,131 @@
   }
 
   .balans-operations {
-    width: 330px;
+    width: 100%;
   }
 
   .balans-operation-filter {
     white-space: nowrap;
     margin-right: 0px;
+    padding: 4px 8px !important;
   }
 
-  
+  .balans-container {
+    margin-right: 0;
+  }
+
 
   .balans-operation-slider {
     overflow-x: auto;
     scrollbar-width: none;
     gap: 8px;
     display: flex;
-    width: 330px;
+    width: 100%;
   }
+}
+
+.custom-calendar__balans {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+  padding: 20px 24px 24px 24px;
+  min-width: 280px;
+  max-width: 320px;
+  position: absolute;
+  z-index: 100;
+  left: 0;
+  top: 48px;
+}
+
+.custom-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.custom-calendar-arrow {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #606060;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: color 0.2s;
+}
+
+.custom-calendar-arrow:hover {
+  color: #456EFD;
+}
+
+.custom-calendar-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #606060;
+  text-align: center;
+  flex: 1;
+}
+
+.custom-calendar-weekdays {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 4px;
+}
+
+.custom-calendar-weekday {
+  width: 32px;
+  text-align: center;
+  color: #606060;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.custom-calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+}
+
+.custom-calendar-day {
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  border-radius: 50%;
+  margin: 0 auto;
+  font-size: 15px;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.custom-calendar-day.selected {
+  background: #456EFD;
+  color: #fff;
+}
+
+.custom-calendar-day.in-range {
+  background: #EDF2FF;
+  color: #456EFD;
+  border-radius: 16px;
+}
+
+.custom-calendar-day.today {
+  border: 1px solid #456EFD;
+}
+
+.custom-calendar-day.disabled {
+  color: #C0C0C0;
+  pointer-events: none;
+  background: none;
+}
+
+.custom-calendar-footer {
+  margin-top: 10px;
+  text-align: center;
+  color: #456EFD;
+  font-size: 15px;
 }

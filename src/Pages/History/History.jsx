@@ -10,6 +10,8 @@ import UsersBot from "../../assents/images/users-bot.png";
 import ChatsBot from "../../assents/images/chats-bot.png";
 import UsersInChatsBot from "../../assents/images/users-bot-active.png";
 import BotIcon from "../../assents/images/bot.png";
+import DateIcon from "../../assents/images/data_icon.png";
+import CalendarPc from "./CalendarPc";
 
 function formatInputDate(date) {
   if (!date) return "";
@@ -17,14 +19,62 @@ function formatInputDate(date) {
   return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
 }
 
-const DateInput = ({ value, onClick, placeholder, iconPosition = "left" }) => (
-  <div className={`history__date-input-wrap ${iconPosition}`} onClick={onClick} tabIndex={0}>
+const DateInput = ({ value, onClick, placeholder, iconPosition = "left", showCalendar, onSelect, onClose, calendarRef, initialMonth, minDate, maxDate }) => (
+  <div className={`history__date-input-wrap ${iconPosition}`} onClick={onClick} tabIndex={0} style={{ position: 'relative' }}>
     {iconPosition === "left" && <CalendarTodayIcon className="history__date-icon" />}
     <span className="history__date-placeholder">{placeholder}</span>
     {value && <span className="history__date-value">{formatInputDate(value)}</span>}
     {iconPosition === "right" && <CalendarTodayIcon className="history__date-icon" />}
+
+    {showCalendar && (
+      <div className="calendar-popup-outer" ref={calendarRef}>
+        <CalendarPopup
+          selected={value}
+          onSelect={onSelect}
+          onClose={onClose}
+          initialMonth={initialMonth}
+          minDate={minDate}
+          maxDate={maxDate}
+        />
+      </div>
+    )}
   </div>
 );
+
+// Функция перевода статуса с английского на русский
+function translateStatus(status) {
+  const statusMap = {
+    'confirmed': 'завершено',
+    'awaiting confirmation': 'в обработке',
+    'cancelled': 'отменено',
+    'pending': 'ожидает',
+    'processing': 'обрабатывается',
+    'completed': 'завершено',
+    'failed': 'неудачно',
+    'waiting': 'ожиданние',
+    'refused': 'отклонено'
+  };
+  return statusMap[status] || status;
+}
+
+// Функция группировки по дате
+function groupPurchasesByDate(purchases) {
+  const groups = {};
+  purchases.flat().forEach(purchase => {
+    const date = new Date(purchase.datetime * 1000);
+    const dateStr = date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    if (!groups[dateStr]) groups[dateStr] = [];
+    groups[dateStr].push(purchase);
+  });
+  // Вернуть массив: [{date: '01.09.2025', items: [...]}, ...]
+  return Object.entries(groups)
+    .sort((a, b) => {
+      // Сортировка по дате (новые вниз)
+      const [dA, dB] = [a[0].split('.').reverse().join('-'), b[0].split('.').reverse().join('-')];
+      return new Date(dA) - new Date(dB);
+    })
+    .map(([date, items]) => ({ date, items }));
+}
 
 const History = () => {
   const [purchases, setPurchases] = useState([]);
@@ -33,6 +83,7 @@ const History = () => {
   const [dateFrom, setDateFrom] = useState(null);
   const [dateTo, setDateTo] = useState(null);
   const [showCalendar, setShowCalendar] = useState(null); // 'from' | 'to' | null
+  const [showCalendarPc, setShowCalendarPc] = useState(false); // для CalendarPc
   const [category, setCategory] = useState("all");
   const [categories, setCategories] = useState([]);
   const [status, setStatus] = useState("all");
@@ -157,54 +208,26 @@ const History = () => {
     <div className="history">
       <h3 className="history__title">История покупок</h3>
       <div className="history__filters-panel">
-        <div className="history__search">
-          <SearchIcon className="history__search-icon" />
-          <input
-            type="text"
-            placeholder="Поиск...."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="history__search-input"
-          />
-        </div>
-        <div className="history__filters-row">
-          <div style={{ position: 'relative', flex: 1 }}>
-            <DateInput
-              value={dateFrom}
-              onClick={() => setShowCalendar(showCalendar === 'from' ? null : 'from')}
-              placeholder="От"
-              iconPosition="left"
+        <div className="history__filters-panel-row">
+          <div className="history__search">
+            <SearchIcon className="history__search-icon" />
+            <input
+              type="text"
+              placeholder="Поиск...."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="history__search-input"
             />
-            {showCalendar === 'from' && (
-              <div className="calendar-popup-outer" ref={calendarRef}>
-                <CalendarPopup
-                  selected={dateFrom}
-                  onSelect={date => setDateFrom(date)}
-                  onClose={() => setShowCalendar(null)}
-                  initialMonth={dateFrom || dateTo || new Date()}
-                  maxDate={dateTo}
-                />
-              </div>
-            )}
           </div>
-          <div style={{ position: '', flex: 1 }}>
-            <DateInput
-              value={dateTo}
-              onClick={() => setShowCalendar(showCalendar === 'to' ? null : 'to')}
-              placeholder="До"
-              iconPosition="right"
+          <div className="history__filters-date__mobile">
+            <CalendarPc
+              dateFrom={dateFrom}
+              dateTo={dateTo}
+              onDateFromChange={setDateFrom}
+              onDateToChange={setDateTo}
+              isOpen={showCalendarPc}
+              onOpenChange={setShowCalendarPc}
             />
-            {showCalendar === 'to' && (
-              <div className="calendar-popup-outer" ref={calendarRef}>
-                <CalendarPopup
-                  selected={dateTo}
-                  onSelect={date => setDateTo(date)}
-                  onClose={() => setShowCalendar(null)}
-                  initialMonth={dateTo || dateFrom || new Date()}
-                  minDate={dateFrom}
-                />
-              </div>
-            )}
           </div>
         </div>
         <select
@@ -217,18 +240,49 @@ const History = () => {
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
         </select>
-        <div className="history__status-tabs">
-          <button className={status === 'all' ? 'active' : ''} onClick={() => setStatus('all')}>Все</button>
-          <button className={status === 'confirmed' ? 'active' : ''} onClick={() => setStatus('confirmed')}>Завершённые</button>
-          <button className={status === 'awaiting confirmation' ? 'active' : ''} onClick={() => setStatus('awaiting confirmation')}>В обработке</button>
-          <button className={status === 'cancelled' ? 'active' : ''} onClick={() => setStatus('cancelled')}>Отменённые</button>
+        <div className="history__filters-date__pc">
+          <CalendarPc
+            dateFrom={dateFrom}
+            dateTo={dateTo}
+            onDateFromChange={setDateFrom}
+            onDateToChange={setDateTo}
+            isOpen={showCalendarPc}
+            onOpenChange={setShowCalendarPc}
+          />
         </div>
       </div>
+      <div className="history__status-tabs">
+        <button className={status === 'all' ? 'active' : ''} onClick={() => setStatus('all')}>Все</button>
+        <button className={status === 'confirmed' ? 'active' : ''} onClick={() => setStatus('confirmed')}>Завершённые</button>
+        <button className={status === 'awaiting confirmation' ? 'active' : ''} onClick={() => setStatus('awaiting confirmation')}>В обработке</button>
+        <button className={status === 'cancelled' || status === 'refused' ? 'active' : ''} onClick={() => setStatus('refused')}>Отменённые</button>
+      </div>
+
+      {/* Индикатор количества записей */}
+      <div className="history__results-info">
+        <span>Найдено записей: {filteredPurchases.reduce((total, group) => total + group.length, 0)}</span>
+        {(dateFrom || dateTo || searchQuery || status !== 'all' || category !== 'all') && (
+          <button
+            className="history__clear-filters"
+            onClick={() => {
+              setDateFrom(null);
+              setDateTo(null);
+              setSearchQuery("");
+              setStatus("all");
+              setCategory("all");
+            }}
+          >
+            Очистить фильтры
+          </button>
+        )}
+      </div>
+
       {/* {formatDate(purchase.datetime)} */}
       <div className="history__list">
-        {filteredPurchases.map((purchaseGroup, groupIndex) => (
+        {groupPurchasesByDate(filteredPurchases).map((group, groupIndex) => (
           <div key={groupIndex} className="history__group">
-            {purchaseGroup.map((purchase) => (
+            <div className="history__group-date" style={{ fontWeight: 500, margin: '10px 0 8px 0' }}>Дата: {group.date}</div>
+            {group.items.map((purchase) => (
               <div key={purchase.post_id} className="history__item">
                 <div className="history__item-header">
                   <div className="history__item-date">
@@ -236,14 +290,11 @@ const History = () => {
                       <img src={purchase.bot.photo || BotIcon} alt="" />
                     </div>
                     <div className="history__item-date-text">
-                      <p className="history__item-date-text-name">{purchase.bot.name}</p>
+                      <p className="history__item-date-text-name">{purchase.bot.name} <span className="history__item-date-text-name-status">{translateStatus(purchase.status)}</span></p>
                       <p className="history__item-date-text-categories">{Array.isArray(purchase.bot.categories) && purchase.bot.categories.length > 0
                         ? purchase.bot.categories.map(cid => categoryMap[cid]?.name || cid).join(', ')
                         : ''}</p>
                     </div>
-                  </div>
-                  <div className={`history__item-status history__item-status--${purchase.status}`}>
-                    {purchase.status}
                   </div>
                 </div>
                 <div className="history__item-content">

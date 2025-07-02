@@ -130,12 +130,33 @@
   background: #1565c0;
 }
 
+.create-post-btn--disabled {
+  background: #e0e0e0 !important;
+  color: #888 !important;
+  cursor: not-allowed !important;
+}
+
+.create-post-btn--disabled:hover {
+  background: #e0e0e0 !important;
+}
+
 .date-picker {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
   width: 180px;
   font-size: 14px;
+}
+
+.date-picker--disabled {
+  background: #f5f5f5 !important;
+  border-color: #ccc !important;
+  color: #888 !important;
+  cursor: not-allowed !important;
+}
+
+.date-picker--disabled::placeholder {
+  color: #888 !important;
 }
 
 /* Стили для календаря */
@@ -207,7 +228,7 @@
   background: #1976d2;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.2s;
@@ -226,6 +247,99 @@
   display: none;
 }
 
+.cart-post-date {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f5f6f8;
+  border-radius: 12px;
+}
+
+.cart-post-date__post {
+  margin-bottom: 15px;
+}
+
+.cart-post-date__calendar {
+  margin-bottom: 15px;
+}
+
+.cart-post-date .post-status {
+  display: flex;
+  align-items: center;
+  background: #3b5bfd;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+  text-align: center;
+}
+
+.item-text__left {
+  display: grid;
+  grid-template-columns: 40% 27% 15%;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.cart-post-date .post-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  width: 100%;
+  justify-content: center;
+}
+.post-link- {
+  margin: 0 auto;
+}
+.post-status__icon {
+  margin-right: 10px;
+}
+.cart-post-date .post-link:hover {
+  text-decoration: underline;
+}
+
+.cart-post-date .create-post-btn {
+  background: #3b5bfd;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.create-post-btn {
+  width: 100%;
+}
+.date-picker {
+  width: 100%;
+}
+.react-datepicker-wrapper {
+  width: 100%;
+}
+.cart-post-date .create-post-btn:hover {
+  background: #2d4ad8;
+}
+
+.cart-post-date .date-picker {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.cart-actions {
+  display: flex;
+}
+
+.cart-summary__total {
+  color: #456EFD;
+}
 
 @media screen and (max-width: 430px) {
   .cart-box__items {
@@ -237,9 +351,15 @@
   .cart-item__price {
     max-width: 100%;
   }
+  .cart-remove-btn {
+    font-size: 14px;
+  }
 
   .cart-box__items-left {
     width: 100%;
+  }
+  .cart-summary__total, .cart-summary__bots {
+    font-size: 14px;
   }
 
   .cart-mobile__hidden {
@@ -255,8 +375,9 @@
   }
 
   .cart-mobile__box {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 20% 40% 30%;
+    gap: 16px;
   }
 
   .cart-mobile__bottom {
@@ -275,6 +396,7 @@
     border-radius: 12px;
     cursor: pointer;
     min-width: 108px;
+    white-space: nowrap;
   }
   .cart-mobile__text {
     margin-left: 8px;
@@ -287,6 +409,7 @@
     padding: 12px 8px;
     font-size: 14px;
     font-weight: 400;
+    text-align: center;
   }
   .cart-item__details {
     flex-direction: column;

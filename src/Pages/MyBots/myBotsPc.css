@@ -1,0 +1,316 @@
+.my-bots__item-pc {
+    padding: 16px;
+    border-radius: 20px;
+    background: #fff;
+    margin-bottom: 16px;
+    max-width: 740px;
+}
+
+
+
+.my-bots__item-head-pc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.my-bots__item__head-image-pc {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.my-bots__item__head-image-pc img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.my-bots__item-title-text-category-pc {
+    margin-bottom: 0;
+    margin-left: 16px;
+    font-size: 14px;
+    color: #456EFD;
+}
+
+.my-bots__item__head-text-pc {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.my-bots__item-title-text-name-pc {
+    margin-bottom: 0;
+    margin-left: 16px;
+    display: flex;
+    align-items: center;
+    font-weight: 900;
+}
+
+.my-bots__item-title-text-active-pc {
+    padding: 4px;
+    color: #456EFD;
+    border: 1px solid #456EFD;
+    background: transparent;
+    border-radius: 8px;
+    margin-left: 12px;
+    font-weight: 500;
+}
+
+.my-bots__bookings-close__show-all-pc {
+    background: #EDF2FF;
+    border-radius: 12px;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-family: monospace;
+    color: #456EFD;
+    border: 1px solid #456EFD;
+    width: 130px;
+    text-align: center;
+}
+
+.my-bots__item-title-text-not-active-pc {
+    color: #606060;
+    border: 1px solid #606060;
+    border-radius: 8px;
+    margin-left: 12px;
+    font-weight: 500;
+    padding: 4px;
+}
+
+.my-bots__edit-btn-pc, .my-bots__delete-btn-pc {
+    background: none;
+    border: none;
+    cursor: pointer;
+    
+}
+
+.my-bots__item-title-user-text-pc img {
+    width: 15px;
+    height: 15px;
+    object-fit: contain;
+}
+
+.my-bots__item-title-user-text-number-pc {
+    font-size: 14px;
+    color: #456EFD;
+    margin-left: 4px;
+}
+.my-bots__item-title-user-text-pc {
+    margin-bottom: 0;
+}
+
+.my-bots-active__btn-pc {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.my-bots__bookings-head-pc-title {
+    margin-bottom: 0;
+    margin-top: 16px;
+}
+
+.my-bots__upload-btn-pc {
+    background: #456EFD;
+    color: #fff;
+    border: none;
+    padding: 7px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.my-bots__item-box__pc {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+.my-bots__bookings-close__slot-pc {
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: #EFF0F2;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 12px;
+    width: 100%;
+    max-width: 220px;
+}
+
+.my-bots__buy-mobile__btn-pc {
+    background: #456EFD;
+    color: #fff;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    border: 1px solid #456EFD;
+}
+
+.my-bots__buy-mobile__btn-pc.active {
+    background: #fff;
+    color: #456EFD;
+    border: 1px solid #456EFD;
+}
+
+.my-bots__buy-mobile__info-pc {
+    display: flex;
+    gap: 20px;
+}
+
+.my-bots__edit-actions-pc {
+    margin-top: 16px;
+}
+
+.my-bots__approve-btn-pc, .my-bots__save-btn-pc {
+    padding: 8px 12px;
+    background: #456EFD;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 16px;
+}
+
+.my-bots__cancel-purchase-btn-pc, .my-bots__cancel-btn-pc {
+    padding: 8px 12px;
+    background: transparent;
+    color: #606060;
+    border: 1px solid #606060;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 16px;
+}
+
+/* Стили для модального окна удаления */
+.my-bots__modal-inline-pc {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 300px;
+    max-width: 400px;
+    border: 1px solid #e0e0e0;
+}
+
+.my-bots__modal-header-pc {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.my-bots__modal-title-pc {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+}
+
+.my-bots__modal-close-pc {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.my-bots__modal-close-pc:hover {
+    color: #333;
+}
+
+.my-bots__modal-body-pc {
+    padding: 20px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.my-bots__modal-actions-pc {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.my-bots__modal-actions-pc button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Стили для формы редактирования */
+.my-bots__edit-form-pc {
+    margin-top: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+.my-bots__bookings-close-text {
+    margin-bottom: 5px;
+    margin-top: 16px;
+}
+
+.my-bots__edit-form__redact-pc {
+    max-width: 400px;
+}
+
+.my-bots__edit-form-title-pc {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.my-bots__edit-form-desc-pc {
+    margin-bottom: 16px;
+}
+
+.my-bots__edit-form-desc-text-pc {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+.my-bots__edit-input-pc {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+}
+
+.my-bots__edit-input-pc:focus {
+    border-color: #456EFD;
+}
+
+@media (max-width: 430px) {
+    .my-bots__pc {
+        display: none;
+    }
+    .my-bots__item-title-text-not-active-pc, .my-bots__item-title-text-active-pc {
+        margin-top: 6px;
+        margin-left: 0;
+        display: inline-block;
+    }
+}

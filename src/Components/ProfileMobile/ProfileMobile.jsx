@@ -10,12 +10,11 @@ import BotsIcon from '../../assents/images/icon_bot-mobile.png';
 import NoUser from '../../assents/images/users-no.png';
 
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NjUxMzI4LCJpYXQiOjE3NDkwNDY1MjgsImp0aSI6IjFiZTkyNzc4ZTU1NjRhY2M5N2Q0MjQxNmNjZTNjZjY2IiwidXNlcl9pZCI6NjU5NjYzNDcxLCJ0ZWxlZ3JhbV9pZCI6NjU5NjYzNDcxLCJmaXJzdF9uYW1lIjoiRGFubnkiLCJsYXN0X25hbWUiOm51bGwsInVzZXJuYW1lIjoiRGFubnlfZGV2X2wiLCJwaG90b191cmwiOiJodHRwczovL3QubWUvaS91c2VycGljLzMyMC9fcXBmSjZqOGFVVkNSU2FZVHp3TXlLUjRxWUZjVURWbmRUck5ZLUlvc05jLmpwZyJ9.of11YZEN8fqPe5zOJ6fjHpbCky2mVMVpDxtDk59QjuU"
-
 const ProfileMobile = () => {
   const { setStep } = useContext(StepContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const token = sessionStorage.getItem('access_token');
   const [userData, setUserData] = useState(null);
   const [balance, setBalance] = useState(0);
   const [retention, SetRetention] = useState(0);
@@ -130,7 +129,7 @@ const ProfileMobile = () => {
     const photoUrl = sessionStorage.getItem('photo_url');
     const accessToken = sessionStorage.getItem('access_token');
 
-    if (photoUrl && token) {
+    if (photoUrl && accessToken) {
       // setIsLoggedIn(true);
       setUserData({
         username: sessionStorage.getItem('username'),
@@ -149,9 +148,8 @@ const ProfileMobile = () => {
   };
 
   // Проверка авторизации
-  const accessToken = sessionStorage.getItem('access_token');
   // const isLogged = !!accessToken;
-  const isLogged = !accessToken;
+  const isLogged = !!token;
 
   if (!isLogged) {
     return (

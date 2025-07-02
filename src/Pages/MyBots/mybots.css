@@ -25,6 +25,7 @@
   align-items: center;
   gap: 6px;
 }
+
 .my-bots__add-btn:hover {
   background: #2563d6;
 }
@@ -42,9 +43,6 @@
 
 .my-bots__list {
   margin-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
 }
 
 .my-bots__item {
@@ -69,24 +67,28 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .my-bots__add-form-block {
   background: #fff;
   border-radius: 16px;
   padding: 24px 32px;
   margin: 24px 0;
-  box-shadow: 0 2px 8px rgba(60,60,60,0.06);
-  max-width: 420px;
+  box-shadow: 0 2px 8px rgba(60, 60, 60, 0.06);
+  width: 740px;
 }
+
 .my-bots__add-form-title {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 32px;
 }
+
 .my-bots__add-form-desc {
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 4px;
 }
+
 .my-bots__add-form-example {
   font-size: 14px;
   font-weight: 400;
@@ -96,7 +98,6 @@
 
 .my-bots__add-form-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -120,6 +121,7 @@
   display: flex;
 
 }
+
 .my-bots__item-title-user-text {
   margin-right: 40px;
   font-weight: 400;
@@ -148,10 +150,16 @@
   overflow: hidden;
   margin-left: 15px;
 }
+
 .my-bots__item__head-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
+}
+
+.my-bots__item-title-user-edit-btn svg {
+  margin-bottom: 4px;
 }
 
 .my-bots__item-title-actions {
@@ -172,13 +180,16 @@
   border-radius: 8px;
   margin-left: 12px;
 }
+
 .my-bots__item-title-text-name {
   margin-bottom: 0;
 }
+
 .my-bots__item-title-text-category {
   margin-bottom: 0;
   font-size: 14px;
   font-weight: 400;
+  color: #456EFD;
 }
 
 .my-bots__save-btn {
@@ -192,9 +203,11 @@
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .my-bots__save-btn:hover {
   background: #2563d6;
 }
+
 .my-bots__cancel-btn {
   background: #fff;
   color: #606060;
@@ -207,6 +220,7 @@
   margin-left: 16px;
   border-radius: 8px;
 }
+
 .my-bots__edit-input {
   max-width: 263px !important;
   padding: 4px !important;
@@ -222,8 +236,9 @@
   background: #3b7bfd;
   border: none;
 }
+
 .my-bots__edit-actions {
- margin-top: 16px;
+  margin-top: 16px;
 }
 
 .my-bots__edit-btn,
@@ -258,8 +273,29 @@
 }
 
 .my-bots__item {
-  position: relative; /* Для позиционирования модалки внутри карточки */
+  position: relative;
+  /* Для позиционирования модалки внутри карточки */
 
+}
+
+.my-bots__buy-mobile__btn {
+  min-width: 64px;
+  padding: 8px 0;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: #456EFD;
+  color: white;
+  font-weight: 500;
+  font-size: 18px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.my-bots__buy-mobile__btn.active {
+  background: white;
+  color: #456EFD;
+  border: 2px solid #456EFD;
 }
 
 /* Встроенное модальное окно удаления */
@@ -268,7 +304,7 @@
   border-radius: 14px;
   padding: 18px 22px 14px 22px;
   min-width: 260px;
-  box-shadow: 0 2px 8px rgba(60,60,60,0.13);
+  box-shadow: 0 2px 8px rgba(60, 60, 60, 0.13);
   position: absolute;
   z-index: 10;
   top: 50%;
@@ -299,6 +335,7 @@
   transition: color 0.2s;
   margin-left: 10px;
 }
+
 .my-bots__modal-close:hover {
   color: #222;
 }
@@ -315,63 +352,92 @@
 .my-bots__mobile {
   display: none;
 }
+
 .my-bots__pc {
   display: block;
+}
+
+.my-bots__bookings-close__show-all {
+  background: #edf2ff;
+  border: 1px solid #456efd;
+  border-radius: 12px;
+  color: #456efd;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 4px 8px;
+  text-align: center;
+  width: 130px;
 }
 
 @media (max-width: 430px) {
   .my-bots__pc {
     display: none;
   }
+
   .my-bots__mobile {
     display: block;
+    margin-top: 16px;
   }
+
   .my-bots__item-head {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     width: 100%;
   }
+
   .my-bots__item-title {
     flex-direction: column;
     align-items: baseline;
   }
+
   .my-bots__upload-btn {
     padding: 7px 55px;
     margin-top: 16px;
   }
+
   .my-bots__item {
     width: 100%;
     padding: 12px;
     margin-bottom: 16px;
   }
+
   .my-bots-active__btn-text {
     margin-left: 16px;
   }
+
   .my-bots__item-title-text-active {
     margin-left: 0;
   }
+
   .my-bots__item-title-text-name {
     font-size: 14px;
   }
+
   .my-bots__item-title-actions {
     display: flex;
     align-items: center;
   }
+
   .my-bots__item-title-user-text img {
     width: 15px;
   }
+
   .my-bots__item-title-user-text-number {
     font-size: 14px !important;
+    margin: 5px 5px !important;
   }
+
   .my-bots__item__head-image {
     margin-left: 0px;
   }
+
   .my-bots__item__head-image {
     width: 60px;
     height: 60px;
     overflow: visible;
   }
+
   .my-bots__bookings-close__slot {
     background: #EFF0F2;
     color: #606060;
@@ -383,10 +449,7 @@
   }
 }
 
-.my-bots__buy-mobile {
-  margin-top: 20px;
-  padding: 0 15px;
-}
+.my-bots__buy-mobile {}
 
 .my-bots__buy-mobile-group {
   margin-bottom: 20px;
@@ -426,4 +489,394 @@
 .my-bots__buy-mobile-status {
   font-size: 14px;
   color: #888;
+}
+
+.my-bots__buy-mobile__btn-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.my-bots__approve-btn {
+  background: #456EFD;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.my-bots__approve-btn:hover {
+  background: #218838;
+}
+
+.my-bots__cancel-purchase-btn {
+  background: transparent;
+  color: black;
+  border: 1px solid #606060;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.my-bots__cancel-purchase-btn:hover {
+  background: #c82333;
+}
+
+/* CustomCalendar Styles */
+.custom-calendar {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.custom-calendar__trigger {
+  width: 100%;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 1rem;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.custom-calendar__trigger:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+.custom-calendar__trigger-text {
+  color: #6b7280;
+  font-size: 14px;
+  text-transform: math-auto;
+}
+
+.custom-calendar__dropdown {
+  margin-top: 0.5rem;
+  padding: 0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+}
+
+.custom-calendar__content {
+  padding: 1rem;
+}
+
+.custom-calendar__time-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  background: white;
+  border-radius: 20px;
+  padding: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.my-bots__item-title-user-edit-btn-pc svg {
+  margin-bottom: 5px;
+}
+
+.my-bots__bookings-close__remove-pc img {
+  margin-bottom: 4px;
+}
+
+.custom-calendar__time-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.custom-calendar__time-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.custom-calendar__time-btn {
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.custom-calendar__time-btn:hover {
+  background: #e5e7eb;
+}
+
+.custom-calendar__time-display {
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+  width: 32px;
+  text-align: center;
+  font-weight: 500;
+  color: #374151;
+}
+
+.custom-calendar__time-separator {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.custom-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.custom-calendar__nav-btn {
+  height: 32px;
+  width: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.custom-calendar__nav-btn:hover {
+  background: #f3f4f6;
+}
+
+.custom-calendar__nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.custom-calendar__month-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.custom-calendar__selection-status {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.custom-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.custom-calendar__weekday {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 0.5rem 0;
+}
+
+.custom-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.custom-calendar__day-btn {
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-calendar__day-btn--other-month {
+  color: #d1d5db;
+}
+
+.custom-calendar__day-btn--past {
+  color: #d1d5db;
+  text-decoration: line-through;
+}
+
+.custom-calendar__day-btn--current {
+  color: #111827;
+}
+
+.custom-calendar__day-btn--current:hover {
+  background: #f3f4f6;
+}
+
+.custom-calendar__day-btn--selected-start {
+  background: #3b82f6;
+  color: white;
+}
+
+.custom-calendar__day-btn--selected-start:hover {
+  background: #2563eb;
+}
+
+.custom-calendar__day-btn--selected-end {
+  background: #10b981;
+  color: white;
+}
+
+.custom-calendar__day-btn--selected-end:hover {
+  background: #059669;
+}
+
+.custom-calendar__day-btn--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.custom-calendar__actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.custom-calendar__action-btn {
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.custom-calendar__action-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.custom-calendar__debug {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.custom-calendar__debug-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.custom-calendar__debug-item {
+  margin-bottom: 0.25rem;
+  color: #6b7280;
+}
+
+.custom-calendar__debug-timestamp {
+  margin-top: 0.5rem;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.mobile-version {
+  display: none;
+}
+
+.pc-version {
+  display: block;
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+  .custom-calendar {
+    max-width: 330px;
+    padding: 0px !important;
+  }
+
+  .mobile-version {
+    display: block;
+  }
+
+  .pc-version {
+    display: none;
+  }
+
+  .custom-calendar__dropdown {
+    width: 325px;
+  }
+
+  .my-bots__add-form-block {
+    width: 100%;
+  }
+
+  .custom-calendar__day-btn {
+    height: 36px;
+    width: 36px;
+    font-size: 13px;
+  }
+
+  .custom-calendar__day-btn {
+    min-width: 36px !important;
+  }
+
+  .my-bots__list {
+    display: block;
+    margin-top: 16px;
+  }
+
+  .custom-calendar__time-display {
+    font-size: 16px;
+    width: 28px;
+  }
+
+  .my-bots {
+    padding: 20px 20px;
+  }
+
+  .custom-calendar__trigger {
+    min-width: 265px !important;
+    max-width: 265px !important;
+    padding: 5px 10px !important;
+    font-size: 14px !important;
+    border: 1px solid #606060 !important;
+    border-radius: 12px !important;
+    height: auto !important;
+    justify-content: space-between !important;
+  }
+
+  .custom-calendar__month-title {
+    font-size: 16px;
+  }
 }

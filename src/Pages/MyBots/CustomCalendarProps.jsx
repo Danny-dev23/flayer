@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Calendar, ChevronUp, ChevronDown } from "luc
 import Button from "@mui/material/Button"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
+import "./customCalendar.css"
 
 const MONTHS = [
   "Январь",
@@ -21,7 +22,7 @@ const MONTHS = [
 
 const DAYS_OF_WEEK = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
 
-export default function CustomCalendar({ onDateRangeChange }) {
+export default function CustomCalendar({ onDateRangeChange, onSave }) {
   const today = new Date()
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
@@ -119,15 +120,17 @@ export default function CustomCalendar({ onDateRangeChange }) {
       const startTimestamp = dateTimeToUnixTimestamp(startDate)
       const endTimestamp = dateTimeToUnixTimestamp(selectedDateTime)
 
-      console.log("start:", startTimestamp)
-      console.log("end:", endTimestamp)
+      console.log("=== CustomCalendar handleDateSelect ===")
+      console.log("startDate object:", startDate)
+      console.log("endDate object:", selectedDateTime)
+      console.log("start timestamp:", startTimestamp)
+      console.log("end timestamp:", endTimestamp)
 
       // Передаем данные в родительский компонент
       if (onDateRangeChange) {
+        console.log("Вызываем onDateRangeChange с:", startTimestamp, endTimestamp)
         onDateRangeChange(startTimestamp, endTimestamp)
       }
-
-      setIsOpen(false)
     }
   }
 
@@ -191,14 +194,25 @@ export default function CustomCalendar({ onDateRangeChange }) {
     setSelectionStep("start")
   }
 
+  const handleSave = async () => {
+    if (!startDate || !endDate) return;
+    const startTimestamp = dateTimeToUnixTimestamp(startDate);
+    const endTimestamp = dateTimeToUnixTimestamp(endDate);
+    if (onSave) {
+      await onSave(startTimestamp, endTimestamp);
+    }
+    setIsOpen(false);
+    resetSelection();
+  };
+
   return (
-    <div className="w-full max-w-md mx-auto p-4">
+    <div className="custom-calendar">
       <Button
         variant="outline"
-        className="w-full justify-between h-12 px-4 rounded-full"
+        className="custom-calendar__trigger"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-gray-600">
+        <span className="custom-calendar__trigger-text">
           {startDate && endDate
             ? `${startDate.day}.${startDate.month + 1}.${startDate.year} - ${endDate.day}.${endDate.month + 1}.${endDate.year}`
             : startDate
@@ -209,35 +223,36 @@ export default function CustomCalendar({ onDateRangeChange }) {
       </Button>
 
       {isOpen && (
-        <Card className="mt-2 p-0 shadow-lg">
-          <CardContent className="p-4">
+        <Card className="custom-calendar__dropdown">
+          <CardContent className="custom-calendar__content">
             {/* Time Selector */}
-            <div className="flex justify-center items-center mb-4 bg-gray-50 rounded-lg p-3">
-              <div className="flex items-center space-x-4">
-                <div className="flex flex-col items-center">
-                  <Button variant="ghost" size="sm" onClick={() => adjustTime("hour", "up")} className="h-6 w-6 p-0">
+            <div className="custom-calendar__time-selector">
+              <div className="custom-calendar__time-controls">
+                <div className="custom-calendar__time-group">
+                  <Button variant="ghost" size="sm" onClick={() => adjustTime("hour", "up")} className="custom-calendar__time-btn">
                     <ChevronUp className="h-3 w-3" />
                   </Button>
-                  <span className="text-lg font-mono w-8 text-center">{tempTime.hour.toString().padStart(2, "0")}</span>
-                  <Button variant="ghost" size="sm" onClick={() => adjustTime("hour", "down")} className="h-6 w-6 p-0">
+                  <span className="custom-calendar__time-display">{tempTime.hour.toString().padStart(2, "0")}</span>
+                  <Button variant="ghost" size="sm" onClick={() => adjustTime("hour", "down")} className="custom-calendar__time-btn">
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </div>
 
-                <span className="text-lg">:</span>
+                <span className="custom-calendar__time-separator">:</span>
 
-                <div className="flex flex-col items-center">
-                  <Button variant="ghost" size="sm" onClick={() => adjustTime("minute", "up")} className="h-6 w-6 p-0">
+                <div className="custom-calendar__time-group">
+                  <Button variant="ghost" size="sm" onClick={() => adjustTime("minute", "up")} className="custom-calendar__time-btn" disabled>
                     <ChevronUp className="h-3 w-3" />
                   </Button>
-                  <span className="text-lg font-mono w-8 text-center">
+                  <span className="custom-calendar__time-display">
                     {tempTime.minute.toString().padStart(2, "0")}
                   </span>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => adjustTime("minute", "down")}
-                    className="h-6 w-6 p-0"
+                    className="custom-calendar__time-btn"
+                    disabled
                   >
                     <ChevronDown className="h-3 w-3" />
                   </Button>
@@ -246,51 +261,65 @@ export default function CustomCalendar({ onDateRangeChange }) {
             </div>
 
             {/* Month Navigation */}
-            <div className="flex justify-between items-center mb-4">
-              <Button variant="ghost" size="sm" onClick={() => navigateMonth("prev")} className="h-8 w-8 p-0">
+            <div className="custom-calendar__navigation">
+              <Button variant="ghost" size="sm" onClick={() => navigateMonth("prev")} className="custom-calendar__nav-btn">
                 <ChevronLeft className="h-4 w-4" />
               </Button>
 
-              <h3 className="text-lg font-medium">
+              <h3 className="custom-calendar__month-title">
                 {MONTHS[currentMonth]} {currentYear}
               </h3>
 
-              <Button variant="ghost" size="sm" onClick={() => navigateMonth("next")} className="h-8 w-8 p-0">
+              <Button variant="ghost" size="sm" onClick={() => navigateMonth("next")} className="custom-calendar__nav-btn">
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
 
             {/* Selection Status */}
-            <div className="text-center mb-3 text-sm text-gray-600">
+            <div className="custom-calendar__selection-status">
               {selectionStep === "start" ? "Выберите начальную дату" : "Выберите конечную дату"}
             </div>
 
             {/* Days of Week */}
-            <div className="grid grid-cols-7 gap-1 mb-2">
+            <div className="custom-calendar__weekdays">
               {DAYS_OF_WEEK.map((day) => (
-                <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                <div key={day} className="custom-calendar__weekday">
                   {day}
                 </div>
               ))}
             </div>
 
             {/* Calendar Grid */}
-            <div className="grid grid-cols-7 gap-1">
+            <div className="custom-calendar__grid">
               {generateCalendarDays().map((dayObj, index) => {
                 const isSelected = dayObj.isCurrentMonth && isDateSelected(dayObj.day)
                 const isClickable = dayObj.isCurrentMonth && !dayObj.isPast
+
+                let dayBtnClass = "custom-calendar__day-btn"
+                
+                if (!dayObj.isCurrentMonth) {
+                  dayBtnClass += " custom-calendar__day-btn--other-month"
+                } else if (dayObj.isPast) {
+                  dayBtnClass += " custom-calendar__day-btn--past"
+                } else {
+                  dayBtnClass += " custom-calendar__day-btn--current"
+                }
+
+                if (isSelected === "start") {
+                  dayBtnClass += " custom-calendar__day-btn--selected-start"
+                } else if (isSelected === "end") {
+                  dayBtnClass += " custom-calendar__day-btn--selected-end"
+                }
+
+                if (!isClickable) {
+                  dayBtnClass += " custom-calendar__day-btn--disabled"
+                }
 
                 return (
                   <Button
                     key={index}
                     variant="ghost"
-                    className={`
-                      h-10 w-10 p-0 text-sm
-                      ${!dayObj.isCurrentMonth ? "text-gray-300" : dayObj.isPast ? "text-gray-300 line-through" : "text-gray-900"}
-                      ${isSelected === "start" ? "bg-blue-500 text-white hover:bg-blue-600" : ""}
-                      ${isSelected === "end" ? "bg-green-500 text-white hover:bg-green-600" : ""}
-                      ${isClickable ? "hover:bg-gray-100" : "cursor-not-allowed opacity-50"}
-                    `}
+                    className={dayBtnClass}
                     onClick={() => isClickable && handleDateSelect(dayObj.day)}
                     disabled={!isClickable}
                   >
@@ -301,12 +330,11 @@ export default function CustomCalendar({ onDateRangeChange }) {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-between mt-4 pt-3 border-t">
-              <Button variant="outline" size="sm" onClick={resetSelection}>
-                Сбросить
+            <div className="custom-calendar__actions">
+              <Button variant="outline" size="sm" onClick={handleSave} className="custom-calendar__action-btn" disabled={!startDate || !endDate}>
+                Сохранить
               </Button>
-
-              <Button variant="outline" size="sm" onClick={() => setIsOpen(false)}>
+              <Button variant="outline" size="sm" onClick={() => setIsOpen(false)} className="custom-calendar__action-btn">
                 Закрыть
               </Button>
             </div>
@@ -315,29 +343,29 @@ export default function CustomCalendar({ onDateRangeChange }) {
       )}
 
       {/* Debug Info */}
-      {(startDate || endDate) && (
-        <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm">
-          <div className="font-medium mb-2">Выбранные даты:</div>
+      {/* {(startDate || endDate) && (
+        <div className="custom-calendar__debug">
+          <div className="custom-calendar__debug-title">Выбранные даты:</div>
           {startDate && (
-            <div>
+            <div className="custom-calendar__debug-item">
               Начало: {startDate.day}.{startDate.month + 1}.{startDate.year} {startDate.hour}:
               {startDate.minute.toString().padStart(2, "0")}
             </div>
           )}
           {endDate && (
-            <div>
+            <div className="custom-calendar__debug-item">
               Конец: {endDate.day}.{endDate.month + 1}.{endDate.year} {endDate.hour}:
               {endDate.minute.toString().padStart(2, "0")}
             </div>
           )}
           {startDate && endDate && (
-            <div className="mt-2 text-xs text-gray-600">
+            <div className="custom-calendar__debug-timestamp">
               <div>Start timestamp: {dateTimeToUnixTimestamp(startDate)}</div>
               <div>End timestamp: {dateTimeToUnixTimestamp(endDate)}</div>
             </div>
           )}
         </div>
-      )}
+      )} */}
     </div>
   )
 }

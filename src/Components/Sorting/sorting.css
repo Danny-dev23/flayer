@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+body, .container, .sorting-container, .sorting-modal, .sorting-calendar, .sorting-calendar-header, .sorting-calendar-weekdays, .sorting-calendar-days, .sorting-calendar-day, .sorting-calendar-header__title, .sorting-calendar-day--selected, .sorting-calendar-day--in-range, .sorting-calendar-day--other-month, .sorting-calendar-day:hover, .sorting-modal__content, .sorting-modal__button-group, .sorting-modal__button-2, .sorting-modal__button-2__text, .modal-stepper__button-next, .modal-stepper__button-prev, .slide-modal__group, .slide-modal__group-input, .slide-modal__title, .slide-modal__title-2, .sorting-options__description-text, .sorting-options, .post-type, .budget, .audience, .file-upload, .podbor, .custom-file-upload, .sorting-options__button, .sorting-modal__close, .item-details__sorting, .item-title__sorting {
+  font-family: 'Manrope', 'Arial', sans-serif !important;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -78,7 +84,7 @@
 }
 
 .sorting-modal__content {
-  padding: 28px  40px !important;
+  padding: 28px 20px !important;
   border-radius: 10px !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
   border: 3px solid transparent !important;
@@ -102,8 +108,115 @@
   display: flex;
 }
 
-.sorting-modal__button-2 {
+.sorting-calendar {
+  width: 100%;
+}
 
+.sorting-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.item-text__sorting {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  align-items: center;
+}
+.item-details__sorting {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+}
+
+.item-stats-and-price {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+}
+.item-title__sorting {
+  justify-content: space-between;
+}
+.item-stats__sorting {
+  justify-self: start;
+}
+
+.sorting-calendar-header__button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.sorting-calendar-header__title {
+  text-transform: capitalize;
+  color: #606060;
+  font-weight: 600;
+}
+
+.sorting-calendar-grid {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+  box-shadow: 0px 4px 24px 0px rgba(60, 60, 60, 0.13);
+  padding: 15px;
+  border-radius: 10px;
+  background: white;
+}
+
+.sorting-calendar-weekday {
+  font-weight: 700;
+  text-align: center;
+  color: #606060;
+  padding: 5px;
+}
+
+.sorting-calendar-day {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.sorting-calendar-day--other-month {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.sorting-calendar-day--selected {
+  background:  #456efd;
+  color: white;
+  font-weight: 600;
+}
+
+.sorting-calendar-day--in-range {
+  background: rgba(69, 110, 253, 0.1);
+  color: #456efd;
+}
+
+.sorting-calendar-day:hover:not(.sorting-calendar-day--other-month) {
+  background: rgba(69, 110, 253, 0.05);
+}
+
+.custom-calendar {
+  width: 100%;
+}
+
+.sorting-modal__button-2 {
   border: 1px solid #606060;
   background: transparent;
   margin-right: 5px;
@@ -137,13 +250,14 @@
   border: none;
   border-radius: 15px;
 }
+
 .modal-stepper__button-prev {
   background: transparent;
   color: #456EFD;
   border: none;
 }
 
-.sorting-modal__button-2.active > .sorting-modal__button-2__text {
+.sorting-modal__button-2.active>.sorting-modal__button-2__text {
   background: linear-gradient(90deg, #456efd, #fc02c9) !important;
   background-clip: text !important;
   -webkit-background-clip: text !important;
@@ -151,13 +265,22 @@
   margin-bottom: 0 !important;
 }
 
-
-.sorting-modal__dialog > div > div {
+.sorting-modal__dialog>div>div {
   border-radius: 10px !important;
+  width: 100% !important;
+  margin: 10px;
 }
 
 .slide-modal__group {
   display: flex;
+}
+
+.sorting-options__description-text {
+  color: #456EFD;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
 }
 
 .slide-modal__group-input {
@@ -166,7 +289,15 @@
   outline: none;
   margin-right: 5px;
   padding: 7px 10px;
-  width: 131px;
+  width: 200x;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+.slide-modal__group-input::-webkit-outer-spin-button,
+.slide-modal__group-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .slide-modal__group-input:last-child {
@@ -175,7 +306,13 @@
 
 .slide-modal__title {
   font-size: 20px;
-  margin: 28px 0px 8px 0px;
+  margin: 0px 0px 4px 0px;
+}
+
+.slide-modal__title-2 {
+  margin-bottom: 24px;
+  font-size: 12px;
+  color: #606060;
 }
 
 .sorting-container h2 {
@@ -251,10 +388,9 @@
   background: #007bff;
   border-radius: 15px;
   color: white;
-  border:  none;
+  border: none;
   margin-top: 30px;
 }
-
 
 .custom-file-upload {
   display: inline-flex;
@@ -288,7 +424,8 @@
 }
 
 .custom-file-upload input[type="file"] {
-  display: none; /* Скрываем стандартный input */
+  display: none;
+  /* Скрываем стандартный input */
 }
 
 .custom-file-upload span {
@@ -304,12 +441,35 @@
   color: #888;
   transition: color 0.2s;
 }
+
 .sorting-modal__close:hover {
   color: #456efd;
 }
 
+.item-details__sorting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.item-title__sorting {
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 0;
+  width: 100%;
+  display: flex;
+}
+
 @media screen and (max-width: 430px) {
-  .sorting-modal > img {
+  .sorting-modal>img {
     width: 100%;
+  }
+  .sorting-options {
+    display: block;
+  }
+  .sorting-options__button {
+    width: 100%;
+    margin-bottom: 16px;
   }
 }

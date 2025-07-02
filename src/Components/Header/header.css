@@ -19,6 +19,14 @@ body {
   position: relative;
 }
 
+.nav-logo-pc {
+
+}
+
+.nav-logo {
+  display: none;
+}
+
 .account-info-center {
   position: absolute;
   left: 50%;
@@ -98,6 +106,8 @@ body {
 
 .header-account__info-icons {
   margin-right: 8px;
+  width: 18px;
+  height: 18px;
 }
 
 .MuiList-root {
@@ -144,7 +154,12 @@ body {
     padding: 8px 10px;
     font-size: 14px;
   }
-
+  .nav-logo-pc {
+    display: none;
+  }
+  .nav-logo {
+    display: block;
+  }
   .nav {
     padding: 0;
   }

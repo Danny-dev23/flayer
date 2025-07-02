@@ -40,13 +40,14 @@ const Step3 = () => (
 const Step4 = () => <div>Step 4 Content</div>;
 const Step5 = () => {
   const { cart } = useContext(CartContext);
+  const { step, setStep } = useContext(StepContext);
   return (
     <div className="catalog">
       {cart.length === 0 ? (
         <div className="empty-cart">
           <img src={EmptyCart} alt="" className="empty-cart__img" />
           <h3 className="empty-cart__title">Коризна пуста</h3>
-          <button className="empty-cart__button">Перейти к каталогу</button>
+          <button className="empty-cart__button" onClick={() => setStep(2)}>Перейти к каталогу</button>
         </div>
       ) : (
         <div className="cart-box">
@@ -142,14 +143,6 @@ const Home = () => {
       <div className="step-fix">
         <div className="step-buttons">
           <button
-            className={`step-button__smart ${step === 6 ? "active" : ""}`}
-            onClick={() => setStep(6)}
-          >
-            <img src={step === 6 ? SmartBtn : SmartBtnActive} alt="" />
-            <p className="step-button__smart-text">Подбор</p>
-          </button>
-
-          <button
             className={`step-button ${step === 1 ? "active" : ""}`}
             onClick={() => setStep(1)}
           >
@@ -161,6 +154,14 @@ const Home = () => {
           >
             <ListOutlinedIcon /> Каталог
           </button>
+          <button
+            className={`step-button__smart ${step === 6 ? "active" : ""}`}
+            onClick={() => setStep(6)}
+          >
+            <img src={step === 6 ? SmartBtn : SmartBtnActive} alt="" />
+            <p className="step-button__smart-text">Умный подбор</p>
+          </button>
+
           <button
             className={`step-button ${step === 3 ? "active" : ""}`}
             onClick={() => setStep(3)}

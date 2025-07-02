@@ -7,34 +7,43 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./cart.css";
 import Galka from "../../assents/images/galoshka.png"
 import Trash from "../../assents/images/trash_can.png"
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDMyMTQ4LCJpYXQiOjE3NDg0MjczNDgsImp0aSI6ImU1ZWZlZWFiMjg2NzQ1YTNiMzk5YjJiMjViNmNhYzg3IiwidXNlcl9pZCI6NTA2MzI1ODg3N30.8bmasO_ZoRQNRHkDm5ZTLnFaojB6Rya2te1psN4hH7Q";
+import UsersBot from "../../assents/images/users-bot.png";
+import UsersBotActive from "../../assents/images/users-bot-active.png";
+import ChatBot from "../../assents/images/chats-bot.png";
+import { StepContext } from "../../utilits/StepContext/StepContext";
 
-const CustomInput = forwardRef(({ value, onClick, placeholder }, ref) => (
+const CustomInput = forwardRef(({ value, onClick, placeholder, disabled, onFocus }, ref) => (
   <input
-    className="date-picker"
-    onClick={onClick}
+    className={`date-picker${disabled ? ' date-picker--disabled' : ''}`}
+    onClick={disabled ? onFocus : onClick}
     value={value}
     placeholder={placeholder}
     ref={ref}
     readOnly
-    style={{ background: "#fff", cursor: "pointer" }}
+    style={{ 
+      background: "#fff", 
+      cursor: disabled ? "not-allowed" : "pointer",
+      opacity: disabled ? 0.6 : 1
+    }}
   />
 ));
 
 const Cart = () => {
   const { cart, setCart } = useContext(CartContext);
+  const { step, setStep } = useContext(StepContext);
   const [categories, setCategories] = useState({});
-  const [selectedDates, setSelectedDates] = useState({});
-  const [postLinks, setPostLinks] = useState({});
-  const [postStatuses, setPostStatuses] = useState({});
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [postLink, setPostLink] = useState(null);
+  const [postStatus, setPostStatus] = useState(false);
   const [purchaseLoading, setPurchaseLoading] = useState(false);
   const [selected, setSelected] = useState([]);
   const [mobileOpen, setMobileOpen] = useState({});
+  const [showAuthMessage, setShowAuthMessage] = useState(false);
+  const token = sessionStorage.getItem('access_token');
 
   // Загрузка категорий для отображения их названий
   useEffect(() => {
     const fetchCategories = async () => {
-      const accessToken = sessionStorage.getItem('access_token');
       if (!token) return;
       try {
         const response = await fetch('https://flyersendtest.ru/api/bot/category/', {
@@ -51,11 +60,21 @@ const Cart = () => {
       }
     };
     fetchCategories();
-  }, []);
+  }, [token]);
+  console.log(categories);
+  
+  const handleDatePickerFocus = () => {
+    if (!token) {
+      setShowAuthMessage(true);
+      setTimeout(() => setShowAuthMessage(false), 3000);
+    }
+  };
 
-  const createPostForBot = async (botNumber) => {
-    const accessToken = sessionStorage.getItem('access_token');
-    if (!token) return;
+  const createPost = async () => {
+    if (!token) {
+      alert('Для создания поста необходимо зарегистрироваться');
+      return;
+    }
 
     try {
       const response = await fetch('https://flyersendtest.ru/api/user/post/create/', {
@@ -72,22 +91,18 @@ const Cart = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        setPostLinks(prev => ({
-          ...prev,
-          [botNumber]: {
-            post_id: data.result.post_id,
-            link: data.result.link
-          }
-        }));
-        checkPostStatus(botNumber, data.result.post_id);
+        setPostLink({
+          post_id: data.result.post_id,
+          link: data.result.link
+        });
+        checkPostStatus(data.result.post_id);
       }
     } catch (error) {
       console.error('Ошибка при создании поста:', error);
     }
   };
 
-  const checkPostStatus = async (botNumber, postId) => {
-    const accessToken = sessionStorage.getItem('access_token');
+  const checkPostStatus = async (postId) => {
     if (!token) return;
 
     try {
@@ -98,12 +113,9 @@ const Cart = () => {
         const data = await response.json();
         const isPostReady = (data.result?.text && data.result.text.trim() !== "") ||
           (data.result?.file && Object.keys(data.result.file).length > 0);
-        setPostStatuses(prev => ({
-          ...prev,
-          [botNumber]: isPostReady
-        }));
+        setPostStatus(isPostReady);
         if (!isPostReady) {
-          setTimeout(() => checkPostStatus(botNumber, postId), 2000);
+          setTimeout(() => checkPostStatus(postId), 2000);
         }
       }
     } catch (error) {
@@ -114,28 +126,34 @@ const Cart = () => {
   const isCheckoutValid = () => {
     if (cart.length === 0) return false;
     const minTimestamp = Date.now() + 24 * 60 * 60 * 1000;
-    return cart.every(item =>
-      selectedDates[item.number] &&
-      postLinks[item.number]?.post_id &&
-      postStatuses[item.number] &&
-      selectedDates[item.number].getTime() > minTimestamp
-    );
+    return selectedDate && postLink?.post_id && postStatus && selectedDate.getTime() > minTimestamp;
   };
 
   const handlePurchase = async () => {
     setPurchaseLoading(true);
-    const accessToken = sessionStorage.getItem('access_token');
     if (!token) return;
 
-    const purchases = cart.map(item => ({
-      category: item.categories?.[0] || item.category,
-      bot_number: item.number,
-      price: item.price,
-      post_id: postLinks[item.number]?.post_id,
-      date: Math.floor(selectedDates[item.number].getTime() / 1000)
-    }));
+    // Группируем ботов по категориям
+    const botsByCategory = cart.reduce((acc, item) => {
+      const category = item.categories?.[0] || item.category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push({
+        number: item.number,
+        price: item.price
+      });
+      return acc;
+    }, {});
 
-    console.log('Отправляемые данные на /api/purchase/create/:', purchases);
+    // Создаем объект покупки для первой категории
+    const [category, bots] = Object.entries(botsByCategory)[0];
+    const purchase = {
+      category: 1,
+      post_id: postLink.post_id,
+      date: Math.floor(selectedDate.getTime() / 1000),
+      bots: bots
+    };
 
     try {
       const response = await fetch('https://flyersendtest.ru/api/purchase/create/', {
@@ -144,13 +162,14 @@ const Cart = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(purchases)
+        body: JSON.stringify(purchase) // Отправляем один объект вместо массива
       });
       if (response.ok) {
         alert('Покупки успешно оформлены!');
         setCart([]);
       } else {
-        alert('Ошибка при оформлении покупок');
+        const errorData = await response.json();
+        alert(`Ошибка при оформлении покупок: ${errorData.detail || 'Неизвестная ошибка'}`);
       }
     } catch (error) {
       alert('Ошибка сети');
@@ -199,10 +218,25 @@ const Cart = () => {
         <div className="empty-cart">
           <img src={EmptyCart} alt="" className="empty-cart__img" />
           <h3 className="empty-cart__title">Корзина пуста</h3>
-          <button className="empty-cart__button">Перейти к каталогу</button>
+          <button className="empty-cart__button" onClick={() => setStep(2)}>Перейти к каталогу</button>
         </div>
       ) : (
         <div className="cart-box">
+          {/* Сообщение о необходимости авторизации */}
+          {showAuthMessage && (
+            <div className="auth-message" style={{
+              background: '#ff6b6b',
+              color: 'white',
+              padding: '10px',
+              borderRadius: '5px',
+              marginBottom: '15px',
+              textAlign: 'center',
+              fontSize: '14px'
+            }}>
+              Для выбора даты необходимо зарегистрироваться
+            </div>
+          )}
+          
           <div className="cart-actions">
             <button onClick={selected.length === cart.length ? deselectAll : selectAll} className="cart-actions__button">
               {selected.length === cart.length ? "Снять все" : "Выбрать все"} <img src={Galka} alt="" />
@@ -230,25 +264,21 @@ const Cart = () => {
                   >
                     {/* Десктопная версия (как есть) */}
                     <div className="catalog-item catalog-item--desktop">
-                      <div className="item-text">
+                      <div className="item-text__cart">
                         <div className="item-text__left">
                           <div className="item-details">
-                            <div className="item-details__image">
-                              {item.photo ? (
-                                <img src={item.photo} alt="Бот" className="item-image" />
-                              ) : (
-                                <img src={BotIcon} alt="Бот" className="item-image" />
-                              )}
-                            </div>
+                            {item.photo !== null ? (
+                              <img src={item.photo} alt="Бот" className="item-image" />
+                            ) : (
+                              <img src={BotIcon} alt="Бот" className="item-image" />
+                            )}
                             <div className="item-text__details">
                               <h3 className="item-title">
                                 {item.name}
-                                {item.data?.purchases && (
-                                  <span className="item-rating">
-                                    <span className="item-rating__star">★</span>{" "}
-                                    {(item.data.purchases / 20).toFixed(1)}
-                                  </span>
-                                )}
+                                <span className="item-rating">
+                                  <span className="item-rating__star">★</span>{" "}
+                                  {item.rate_count}
+                                </span>
                               </h3>
                               <p className="my-bots__item-title-text-category">
                                 {item.categories && categories
@@ -263,22 +293,37 @@ const Cart = () => {
                           <div className="item-stats-cart">
                             <div className="item-stats__box">
                               <span className="item-stats__text">
-                                Аудитория: {" "}
+                                <img src={UsersBot} alt="users-bot" />
                                 <span className="item-stats__text-span">
-                                  {item.file?.users ?? "-"}
+                                  {item.file?.users ?? "-"} тыс
                                 </span>
                               </span>
                               <span className="item-stats__text">
-                                RU: <span className="item-stats__text-span">{item.data?.ru ?? "-"}</span>
-                              </span>
-                              <span className="item-stats__text">
-                                Покупок: {" "}
+                                Покупок:{" "}
                                 <span className="item-stats__text-span">
                                   {item.data?.purchases ?? 0}
                                 </span>
                               </span>
+
                               <span className="item-stats__text">
-                                МЦА: <span className="item-stats__text-span">{item.data?.men ?? "-"}</span>
+                                <img src={ChatBot} alt="chats-bot" />
+                                <span className="item-stats__text-span">
+                                  {item.file?.chats ?? "-"} тыс
+                                </span>
+                              </span>
+                              <span className="item-stats__text">
+                                RU: <span className="item-stats__text-span">{item.data?.ru ?? "-"} </span> %
+                              </span>
+                              <span className="item-stats__text">
+                                <img src={UsersBotActive} alt="users-bot-active" />
+                                <span className="item-stats__text-span">
+                                  {item.file?.users_in_chats ?? "-"} тыс
+                                </span>
+                              </span>
+
+
+                              <span className="item-stats__text">
+                                МЦА: <span className="item-stats__text-span">{item.data?.men ?? "-"}</span> %
                               </span>
                             </div>
 
@@ -287,72 +332,6 @@ const Cart = () => {
                             <span className="item-price-cart">
                               USDT {item.price}
                             </span>
-                          </div>
-                        </div>
-                        <div className="cart-item__details">
-                          <div className="cart-item__post">
-                            {postLinks[item.number] ? (
-                              <div className="post-status">
-                                {postStatuses[item.number] ? (
-                                  <div className="post-link-">
-                                    <span className="post-status__icon">✓</span>
-                                    Пост загружен
-                                  </div>
-                                ) : (
-                                  <a
-                                    href={postLinks[item.number].link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="post-link"
-                                  >
-                                    Загрузить пост
-                                  </a>
-                                )}
-                              </div>
-                            ) : (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  createPostForBot(item.number);
-                                }}
-                                className="create-post-btn"
-                              >
-                                Создать  пост
-                              </button>
-                            )}
-                          </div>
-
-                          <div className="cart-item__calendar">
-                            <DatePicker
-                              selected={selectedDates[item.number]}
-                              onChange={date => {
-                                setSelectedDates(prev => ({
-                                  ...prev,
-                                  [item.number]: date
-                                }));
-                              }}
-                              minDate={minDateTime}
-                              maxDate={maxDateTime}
-                              filterDate={date => {
-                                const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
-                                const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
-                                return (
-                                  endOfDay >= minDateTime && startOfDay <= maxDateTime
-                                );
-                              }}
-                              filterTime={time => {
-                                return time >= minDateTime && time <= maxDateTime;
-                              }}
-                              placeholderText="Выберите дату и время"
-                              dateFormat="dd.MM.yyyy HH:00"
-                              showTimeSelect
-                              timeFormat="HH:00"
-                              timeIntervals={60}
-                              timeCaption="Время"
-                              customInput={<CustomInput />}
-                              shouldCloseOnSelect={true}
-                              onClick={e => e.stopPropagation()}
-                            />
                           </div>
                         </div>
                       </div>
@@ -397,72 +376,6 @@ const Cart = () => {
                           <span className="item-price-cart">USDT {item.price}</span>
                         </div>
                       </div>
-                      <div className="cart-item__details">
-                          <div className="cart-item__post-mobile">
-                            {postLinks[item.number] ? (
-                              <div className="post-status">
-                                {postStatuses[item.number] ? (
-                                  <div className="create-post-btn">
-                                    <span className="post-status__icon">✓</span>
-                                    Пост загружен
-                                  </div>
-                                ) : (
-                                  <a
-                                    href={postLinks[item.number].link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="create-post-btn"
-                                  >
-                                    Загрузить пост
-                                  </a>
-                                )}
-                              </div>
-                            ) : (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  createPostForBot(item.number);
-                                }}
-                                className="create-post-btn"
-                              >
-                                Создать пост
-                              </button>
-                            )}
-                          </div>
-
-                          <div className="cart-item__calendar">
-                            <DatePicker
-                              selected={selectedDates[item.number]}
-                              onChange={date => {
-                                setSelectedDates(prev => ({
-                                  ...prev,
-                                  [item.number]: date
-                                }));
-                              }}
-                              minDate={minDateTime}
-                              maxDate={maxDateTime}
-                              filterDate={date => {
-                                const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
-                                const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
-                                return (
-                                  endOfDay >= minDateTime && startOfDay <= maxDateTime
-                                );
-                              }}
-                              filterTime={time => {
-                                return time >= minDateTime && time <= maxDateTime;
-                              }}
-                              placeholderText="Выберите дату и время"
-                              dateFormat="dd.MM.yyyy HH:00"
-                              showTimeSelect
-                              timeFormat="HH:00"
-                              timeIntervals={60}
-                              timeCaption="Время"
-                              customInput={<CustomInput />}
-                              shouldCloseOnSelect={true}
-                              onClick={e => e.stopPropagation()}
-                            />
-                          </div>
-                        </div>
                     </div>
                   </div>
                 );
@@ -473,8 +386,8 @@ const Cart = () => {
                 <p className="cart-summary__bots">
                   {totalCount} {
                     totalCount === 1 ? 'бот' :
-                    totalCount >= 2 && totalCount <= 4 ? 'бота' :
-                    'ботов'
+                      totalCount >= 2 && totalCount <= 4 ? 'бота' :
+                        'ботов'
                   }
                 </p>
                 <p className="cart-summary__total">
@@ -482,9 +395,74 @@ const Cart = () => {
                   <span className="cart-summary__total-price">{totalSum} USDT</span>
                 </p>
               </div>
+
+              {/* Блок создания поста и выбора даты */}
+              <div className="cart-post-date">
+                <div className="cart-post-date__post">
+                  {postLink ? (
+                    <div className="post-status">
+                      {postStatus ? (
+                        <div className="post-link-">
+                          <span className="post-status__icon">✓</span>
+                          Пост загружен
+                        </div>
+                      ) : (
+                        <a
+                          href={postLink.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="post-link"
+                        >
+                          Загрузить пост
+                        </a>
+                      )}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={createPost}
+                      className={`create-post-btn${!token ? ' create-post-btn--disabled' : ''}`}
+                      disabled={!token}
+                      style={{
+                        opacity: !token ? 0.6 : 1,
+                        cursor: !token ? 'not-allowed' : 'pointer'
+                      }}
+                    >
+                      {!token ? 'Создать пост (требуется регистрация)' : 'Создать пост'}
+                    </button>
+                  )}
+                </div>
+
+                <div className="cart-post-date__calendar">
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={date => setSelectedDate(date)}
+                    minDate={minDateTime}
+                    maxDate={maxDateTime}
+                    filterDate={date => {
+                      const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+                      const endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+                      return (
+                        endOfDay >= minDateTime && startOfDay <= maxDateTime
+                      );
+                    }}
+                    filterTime={time => {
+                      return time >= minDateTime && time <= maxDateTime;
+                    }}
+                    placeholderText={!token ? "Выберите дату и время (требуется регистрация)" : "Выберите дату и время"}
+                    dateFormat="dd.MM.yyyy HH:00"
+                    showTimeSelect
+                    timeFormat="HH:00"
+                    timeIntervals={60}
+                    timeCaption="Время"
+                    customInput={<CustomInput disabled={!token} onFocus={handleDatePickerFocus} />}
+                    shouldCloseOnSelect={true}
+                    disabled={!token}
+                  />
+                </div>
+              </div>
+
               <button
-                className={`cart-summary__checkout${!isCheckoutValid() ? ' cart-summary__checkout--disabled' : ''
-                  }`}
+                className={`cart-summary__checkout${!isCheckoutValid() ? ' cart-summary__checkout--disabled' : ''}`}
                 disabled={!isCheckoutValid() || purchaseLoading}
                 onClick={handlePurchase}
               >

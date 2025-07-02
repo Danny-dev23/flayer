@@ -1,0 +1,20 @@
+.custom-calendar__dropdown {
+    width: 345px;
+}
+
+.custom-calendar__trigger {
+    width: 345px !important;
+    padding: 5px 10px !important;
+    justify-content: space-between !important;
+    border-radius: 10px !important;
+    border: 1px solid #606060 !important;
+    height: auto !important;
+}
+
+.custom-calendar {
+    padding: 0 !important;
+}
+
+.custom-calendar__day-btn {
+    min-width: 40px !important;
+}

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AlertContext } from "../../utilits/AlertContext/AlertContext";
 
 const AddBot = () => {
+  const { showAlert } = useContext(AlertContext);
   const [showAddForm, setShowAddForm] = useState(false);
   const [addToken, setAddToken] = useState("");
   const [adding, setAdding] = useState(false);
@@ -9,6 +11,7 @@ const AddBot = () => {
     const accessToken = sessionStorage.getItem('access_token');
     if (!addToken || !accessToken) return;
     setAdding(true);
+    window.location.reload()
     try {
       const response = await fetch('https://flyersendtest.ru/api/user/bot/create/', {
         method: 'POST',
@@ -23,10 +26,10 @@ const AddBot = () => {
         setShowAddForm(false);
         window.dispatchEvent(new Event('botsUpdated'));
       } else {
-        alert('Ошибка при добавлении бота');
+        showAlert('Ошибка при добавлении бота', 'error');
       }
     } catch (error) {
-      alert('Ошибка при добавлении бота');
+      showAlert('Ошибка при добавлении бота', 'error');
     } finally {
       setAdding(false);
     }
@@ -34,7 +37,10 @@ const AddBot = () => {
 
   return (
     <>
-      <button className="my-bots__add-btn" onClick={() => setShowAddForm(true)}>
+      <button className="my-bots__add-btn" onClick={() => {
+        setShowAddForm(true);
+        
+      }}>
         Добавить бота&nbsp;+
       </button>
       {showAddForm && (
@@ -50,7 +56,7 @@ const AddBot = () => {
             onChange={e => setAddToken(e.target.value)}
           />
           <div style={{ display: 'flex', gap: 10, marginTop: 10 }} className="my-bots__add-form-actions">
-            <button className="my-bots__save-btn" onClick={handleAddBot} disabled={adding || !addToken}>
+            <button className="my-bots__save-btn"  onClick={handleAddBot} disabled={adding || !addToken} >
               Далее
             </button>
             <button className="my-bots__cancel-btn" onClick={() => { setShowAddForm(false); setAddToken(""); }}>

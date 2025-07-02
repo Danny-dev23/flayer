@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import LogutIcon from "../../assents/images/logutIcon.png";
 // Images
 import Logo from "../../assents/images/Logo__mobile.png";
+import LogoPc from "../../assents/images/log_pc.png";
 import Cart from "../../assents/images/Cart.png";
 import TelegramIcon from "../../assents/images/telegramIcon.png";
 import Avatar from "../../assents/images/avatar.png";
@@ -24,7 +25,7 @@ import TelegramLogin from "../TelegramBtn/TelegramLogin";
 import { Logout } from "@mui/icons-material";
 
 const Header = () => {
-  const { setStep } = useContext(StepContext);
+  const { step,setStep } = useContext(StepContext);
   const { cart } = useContext(CartContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -66,13 +67,17 @@ const Header = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    if (isLoggedIn) {
+      fetchData();
+    }
+  }, [isLoggedIn]);
 
   const handleLogout = async () => {
     const accessToken = sessionStorage.getItem('access_token');
     if (!accessToken) {
       sessionStorage.clear();
+      setIsLoggedIn(false);
+      setUserData(null);
       setStep(1);
       return;
     }
@@ -89,6 +94,8 @@ const Header = () => {
       // Можно обработать ошибку, если нужно
     } finally {
       sessionStorage.clear();
+      setIsLoggedIn(false);
+      setUserData(null);
       setStep(1);
       window.location.reload();
     }
@@ -169,7 +176,10 @@ const Header = () => {
     <header className="header">
       <nav className="nav">
         <Link to="/" className="nav-logo">
-          <img src={Logo} alt="Logo" />
+          <img src={Logo} alt="Logo" onClick={() => setStep(1)} style={{cursor: 'pointer'}}  />
+        </Link>
+        <Link to="/" className="nav-logo-pc">
+          <img src={LogoPc} alt="Logo" onClick={() => setStep(1)} style={{cursor: 'pointer'}}  />
         </Link>
         {isLoggedIn && (
           <div className="account-info-center">
@@ -267,7 +277,7 @@ const Header = () => {
         <div className="nav-right">
           {isLoggedIn ? (
             <div className="button-header">
-              <span className="header-balans" style={{ color: "#1976d2" }}>
+              <span className="header-balans" style={{ color: "#1976d2", cursor: 'pointer' }} onClick={() => setStep(7)} >
                 {Math.round((balance - retention) * 100) / 100} USDT
               </span>
               <button onClick={() => setStep(5)} className="nav-cart">
@@ -291,10 +301,10 @@ const Header = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
+                <span>Войти <span className="telegram-login-button__text">через </span></span>
                 <svg className="telegram-icon" viewBox="0 0 24 24" width="24" height="24">
                   <path fill="currentColor" d="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z"/>
                 </svg>
-                <span>Войти <span className="telegram-login-button__text">через телеграмм</span></span>
               </a>
             </>
           )}

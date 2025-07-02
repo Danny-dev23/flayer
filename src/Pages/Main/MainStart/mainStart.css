@@ -52,6 +52,10 @@
   margin-bottom: 0;
 }
 
+.main-start__steps-mobile {
+  display: none;
+}
+
 
 @media screen and (max-width: 430px) {
   .main-start__steps {
@@ -59,6 +63,9 @@
   }
   .main-start__steps-box__image > img {
     width: 100%;
+  }
+  .main-start__steps-mobile {
+    display: block;
   }
   .main-start__title {
     font-size: 18px;

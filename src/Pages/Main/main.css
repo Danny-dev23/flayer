@@ -7,11 +7,13 @@
   margin: 0px 80px 28px 32px;
   background: white;
   padding: 100px 0px 80px 0px;
+  border-radius: 20px;
 }
 
 .bg-white {
   background: white;
   margin: 0px 80px 28px 32px;
+  border-radius: 20px;
 }
 
 

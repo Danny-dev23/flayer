@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import "./balans.css";
 import axios from "axios";
+import CalendarIcon from "../../assents/images/data_icon.png"
 
 const Balans = () => {
   const [balance, setBalance] = useState(0);
@@ -21,6 +22,8 @@ const Balans = () => {
   const [activeOperation, setActiveOperation] = useState("Пополнить баланс");
   const [history, setHistory] = useState([]);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [calendarStep, setCalendarStep] = useState("from"); // "from" или "to"
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [methods, setMethods] = useState([]);
@@ -30,6 +33,8 @@ const Balans = () => {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [transferUserId, setTransferUserId] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
+  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,15 +134,7 @@ const Balans = () => {
       return true;
     });
   };
-  const handleDateFromChange = (event) => {
-    setDateFrom(event.target.value);
-  };
 
-  const handleDateToChange = (event) => {
-    setDateTo(event.target.value);
-  };
-
-  // Добавляем обработчик для кнопок фильтра
   const handleFilterClick = (status) => {
     setStatusFilter(status);
   };
@@ -148,8 +145,12 @@ const Balans = () => {
     setActiveOperation(type); // Устанавливаем активную кнопку
   };
 
-  // Добавьте эту функцию в компонент Balans
-  const getStatusClass = (status) => {
+  const getStatusClass = (status, operation) => {
+    // Если тип операции transfer, всегда возвращаем success
+    if (operation && operation.type === "transfer") {
+      return "balans-history-status__success";
+    }
+    
     switch (status) {
       case "checking":
         return "balans-history-status__checking";
@@ -161,7 +162,12 @@ const Balans = () => {
         return "balans-history-status";
     }
   };
-  const getStatusTranslation = (status) => {
+  const getStatusTranslation = (status, operation) => {
+    // Если тип операции transfer, всегда возвращаем "Успешно"
+    if (operation && operation.type === "transfer") {
+      return "Успешно";
+    }
+    
     switch (status) {
       case "checking":
         return "В обработке";
@@ -277,14 +283,127 @@ const Balans = () => {
     }
   };
 
+  function getDaysInMonth(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+  function getFirstDayOfWeek(year, month) {
+    return new Date(year, month, 1).getDay() || 7;
+  }
+
+  function handleDayClick(day) {
+    const selected = new Date(calendarYear, calendarMonth, day);
+    if (calendarStep === "from") {
+      setDateFrom(selected.toISOString());
+      setDateTo(""); // сбрасываем "до"
+      setCalendarStep("to");
+    } else {
+      if (selected < new Date(dateFrom)) {
+        setDateTo(dateFrom);
+        setDateFrom(selected.toISOString());
+      } else {
+        setDateTo(selected.toISOString());
+      }
+      setCalendarOpen(false);
+      setCalendarStep("from");
+    }
+  }
+
   return (
     <div className="balans">
       <h4 className="balans-title">Баланс</h4>
       <div className="balans-flex">
         <div className="balans-container">
+          <div className="balans-info__date">
+            <button
+              className="balans-info__date-button"
+              onClick={() => setCalendarOpen(true)}
+            >
+              {dateFrom && dateTo
+                ? `${new Date(dateFrom).toLocaleDateString('ru-RU')} - ${new Date(dateTo).toLocaleDateString('ru-RU')}`
+                : 'Выбрать период'}{' '}
+              <img src={CalendarIcon} alt="calendar" />
+            </button>
+            {calendarOpen && (
+              <>
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(0,0,0,0)',
+                    zIndex: 99
+                  }}
+                  onClick={() => setCalendarOpen(false)}
+                />
+                <div className="custom-calendar__balans">
+                  <div className="custom-calendar-header">
+                    <button className="custom-calendar-arrow" onClick={() => {
+                      if (calendarMonth === 0) {
+                        setCalendarMonth(11); setCalendarYear(y => y - 1);
+                      } else {
+                        setCalendarMonth(m => m - 1);
+                      }
+                    }}>{"<"}</button>
+                    <span className="custom-calendar-title">
+                      {["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"][calendarMonth]} {calendarYear}
+                    </span>
+                    <button className="custom-calendar-arrow" onClick={() => {
+                      if (calendarMonth === 11) {
+                        setCalendarMonth(0); setCalendarYear(y => y + 1);
+                      } else {
+                        setCalendarMonth(m => m + 1);
+                      }
+                    }}>{">"}</button>
+                  </div>
+                  <div className="custom-calendar-weekdays">
+                    {["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map(d => (
+                      <div key={d} className="custom-calendar-weekday">{d}</div>
+                    ))}
+                  </div>
+                  <div className="custom-calendar-days">
+                    {Array(getFirstDayOfWeek(calendarYear, calendarMonth)-1).fill(null).map((_,i) => (
+                      <div key={"empty"+i} className="custom-calendar-day disabled" />
+                    ))}
+                    {Array(getDaysInMonth(calendarYear, calendarMonth)).fill(null).map((_,i) => {
+                      const day = i+1;
+                      const dateObj = new Date(calendarYear, calendarMonth, day);
+                      const isToday = (dateObj.toDateString() === new Date().toDateString());
+                      const isSelected = (
+                        (dateFrom && new Date(dateFrom).toDateString() === dateObj.toDateString()) ||
+                        (dateTo && new Date(dateTo).toDateString() === dateObj.toDateString())
+                      );
+                      let inRange = false;
+                      if (dateFrom && dateTo) {
+                        const from = new Date(dateFrom);
+                        const to = new Date(dateTo);
+                        inRange = dateObj > from && dateObj < to;
+                      }
+                      return (
+                        <button
+                          key={day}
+                          className={
+                            'custom-calendar-day' +
+                            (isSelected ? ' selected' : '') +
+                            (inRange ? ' in-range' : '') +
+                            (isToday ? ' today' : '')
+                          }
+                          onClick={() => handleDayClick(day)}
+                          type="button"
+                        >
+                          {day}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
           <div className="balans-info">
             <Box className="balans-header">
-              <h6 className="balans-amount">
+              {/* <h6 className="balans-amount">
                 Баланс:{" "}
                 <span
                   className="balans-amount-value"
@@ -292,31 +411,10 @@ const Balans = () => {
                 >
                   {Math.round(balance - retention)} USDT
                 </span>
-              </h6>
-              <div className="balans-buttons">
-                <button
-                  className={`balans-button ${activeOperation === "Пополнить баланс" ? "active" : ""
-                    }`}
-                  onClick={() => handleOperationClick("Пополнить баланс")}
-                >
-                  Пополнить
-                </button>
-                <button
-                  className={`balans-button ${activeOperation === "Вывод средств" ? "active" : ""
-                    }`}
-                  onClick={() => handleOperationClick("Вывод средств")}
-                >
-                  Вывести
-                </button>
-                <button
-                  className={`balans-button ${activeOperation === "Перевод средств" ? "active" : ""
-                    }`}
-                  onClick={() => handleOperationClick("Перевод средств")}
-                >
-                  Перевести
-                </button>
-              </div>
+              </h6> */}
+              { }
               <div className="balans-method-mobile">
+
                 {isOperationVisible && (
                   <div className="balans-operations">
                     <div className="top-up-container">
@@ -490,22 +588,19 @@ const Balans = () => {
               </div>
             </Box>
 
-            {/* Фильтр по дате */}
-
-
             {/* Фильтры операций */}
             <div className="balans-operation-slider">
               <button
                 className={`balans-operation-filter ${statusFilter === "all" ? "active" : ""}`}
                 onClick={() => handleFilterClick("all")}
               >
-                Все операции
+                Все
               </button>
               <button
                 className={`balans-operation-filter ${statusFilter === "success" ? "active" : ""}`}
                 onClick={() => handleFilterClick("success")}
               >
-                Успешно
+                Завершённые
               </button>
               <button
                 className={`balans-operation-filter ${statusFilter === "checking" ? "active" : ""}`}
@@ -520,94 +615,79 @@ const Balans = () => {
                 Отменённые
               </button>
             </div>
-            {/* <div className="balans-operation-slider">
-              <div className="balans-operation-slider">
-                <div className="balans-operation-filters">
-
-
-
-
-                </div>
-              </div>
-            </div> */}
           </div>
 
           <div className="balans-history">
-            <h6 className="balans-history-title">История пополнения</h6>
-            {getFilteredHistory("deposit").map((operation, index) => (
-              <div key={index} className="balans-history-item">
-                <p className="balans-history-date">
-                  Дата:{" "}
-                  <span className="balans-history-date__span">
-                    {new Date(operation.datetime * 1000).toLocaleDateString(
-                      "ru-RU"
-                    )}
-                  </span>
-                </p>
-                <div className="balans-history-amount">
-                  Сумма:{" "}
-                  <span className="balans-history-date__span">
-                    +{Math.round(operation.amount)} USDT
-                  </span>
-                </div>
-                <div className="balans-history-status__success">Успешно</div>
-              </div>
-            ))}
-          </div>
+            {history
+              .filter((operation) => {
+                const operationDate = new Date(operation.datetime * 1000);
 
-          {/* История выводов */}
-          <div className="balans-history">
-            <h6 className="balans-history-title">История выводов</h6>
-            {getFilteredHistory("withdraw").map((operation, index) => (
-              <div key={index} className="balans-history-item">
-                <p className="balans-history-date">
-                  Дата:{" "}
-                  <span className="balans-history-date__span">
-                    {new Date(operation.datetime * 1000).toLocaleDateString(
-                      "ru-RU"
-                    )}
-                  </span>
-                </p>
-                <div className="balans-history-amount">
-                  Сумма:{" "}
-                  <span className="balans-history-date__span">
-                    -{Math.round(operation.amount)} USDT
-                  </span>
-                </div>
-                <div className={getStatusClass(operation.status)}>
-                  {getStatusTranslation(operation.status)}
-                </div>
-              </div>
-            ))}
-          </div>
+                // Проверка на соответствие статусу
+                if (statusFilter !== "all") {
+                  // Для операций типа transfer считаем их как success
+                  const effectiveStatus = operation.type === "transfer" ? "success" : operation.status;
+                  if (effectiveStatus !== statusFilter) {
+                    return false;
+                  }
+                }
 
-          {/* История переводов */}
-          <div className="balans-history">
-            <h6 className="balans-history-title">История переводов</h6>
-            {getFilteredHistory("transfer").map((operation, index) => (
-              <div key={index} className="balans-history-item">
-                <p className="balans-history-date">
-                  Дата:{" "}
-                  <span className="balans-history-date__span">
-                    {new Date(operation.datetime * 1000).toLocaleDateString(
-                      "ru-RU"
-                    )}
-                  </span>
-                </p>
-                <div className="balans-history-amount">
-                  Сумма:{" "}
-                  <span className="balans-history-date__span">
-                    {Math.round(operation.amount)} USDT
-                  </span>
+                // Проверка на соответствие диапазону дат
+                if (dateFrom && new Date(dateFrom) > operationDate) return false;
+                if (dateTo && new Date(dateTo) < operationDate) return false;
+
+                return true;
+              })
+              .map((operation, index) => (
+                <div key={index} className="balans-history-item">
+                  <p className="balans-history-date">
+                    Дата:{" "}
+                    <span className="balans-history-date__span">
+                      {new Date(operation.datetime * 1000).toLocaleDateString(
+                        "ru-RU"
+                      )}
+                    </span>
+                  </p>
+                  <div className={getStatusClass(operation.status, operation)}>
+                    {getStatusTranslation(operation.status, operation)}
+                  </div>
+                  <div className="balans-history-amount">
+                    Сумма:{" "}
+                    <span className="balans-history-date__span">
+                      {operation.type === "deposit" ? "+" : operation.type === "withdraw" ? "-" : ""}
+                      {Math.round(operation.amount)} USDT
+                    </span>
+                  </div>
                 </div>
-                <div className="balans-history-status__success">Успешно</div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
         <div className="balans-method">
+          <div className="balans-buttons">
+            <button
+              className={`balans-button ${activeOperation === "Пополнить баланс" ? "active" : ""
+                }`}
+              onClick={() => handleOperationClick("Пополнить баланс")}
+            >
+              Пополнить
+            </button>
+            <button
+              className={`balans-button ${activeOperation === "Вывод средств" ? "active" : ""
+                }`}
+              onClick={() => handleOperationClick("Вывод средств")}
+            >
+              Вывести
+            </button>
+            <button
+              className={`balans-button ${activeOperation === "Перевод средств" ? "active" : ""
+                }`}
+              onClick={() => handleOperationClick("Перевод средств")}
+            >
+              Перевести
+            </button>
+          </div>
           {isOperationVisible && (
             <div className="balans-operations">
+
               <div className="top-up-container">
                 <h4 className="top-up-title">{operationType}</h4>
                 {operationType === "Пополнить баланс" && (

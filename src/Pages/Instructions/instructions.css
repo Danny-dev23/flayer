@@ -2,7 +2,7 @@
 .instructions {
   background: #EFF0F2;
   padding: 32px 40px 113px 24px;
-  height: calc(100vh - 270px);
+  min-height: calc(100vh - 270px);
 }
 
 .instructions-title {
